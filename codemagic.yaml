@@ -17,10 +17,6 @@ workflows:
           echo "EXPO_PUBLIC_API_URL=${BACKEND_URL:-https://api-metal-connect.dev.rraasi.com}" >> .env
       - name: Install dependencies
         script: npm install --legacy-peer-deps
-      - name: Generate Prisma client
-        script: cd backend && npx prisma generate
-      - name: Build backend
-        script: cd backend && npm run build
       - name: Expo Prebuild
         script: npx expo prebuild --platform android --clean --non-interactive
       - name: Build APK
@@ -54,10 +50,6 @@ workflows:
           echo "EXPO_PUBLIC_API_URL=${BACKEND_URL:-https://api-metal-connect.dev.rraasi.com}" >> .env
       - name: Install dependencies
         script: npm install --legacy-peer-deps
-      - name: Generate Prisma client
-        script: cd backend && npx prisma generate
-      - name: Build backend
-        script: cd backend && npm run build
       - name: Expo Prebuild
         script: npx expo prebuild --platform android --clean --non-interactive
       - name: Build AAB
