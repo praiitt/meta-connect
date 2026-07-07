@@ -4,10 +4,11 @@ import apiClient from '../api/client';
 
 export interface User {
   id: string;
-  email: string;
+  email?: string;
   name: string;
   phone: string;
   company: string;
+  gst?: string;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
   role: 'CUSTOMER' | 'ADMIN';
 }
@@ -19,8 +20,7 @@ interface AuthState {
   error: string | null;
   
   // Actions
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (data: { email: string; password: string; name: string; phone: string; company: string }) => Promise<boolean>;
+  login: (phone: string, loginCode: string) => Promise<boolean>;
   setAuth: (user: User, token: string) => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
@@ -35,10 +35,10 @@ export const useAuthStore = create<AuthState>((set) => ({
   
   clearError: () => set({ error: null }),
 
-  login: async (email, password) => {
+  login: async (phone, loginCode) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await apiClient.post('/auth/login', { email, password });
+      const response = await apiClient.post('/auth/login', { phone, loginCode });
       const { token, user } = response.data;
       
       await AsyncStorage.setItem('auth_token', token);
@@ -48,27 +48,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       return true;
     } catch (err: any) {
       set({ 
-        error: err.response?.data?.message || 'Login failed. Please check your credentials.',
-        isLoading: false 
-      });
-      return false;
-    }
-  },
-
-  register: async (data) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await apiClient.post('/auth/register', data);
-      const { token, user } = response.data;
-      
-      await AsyncStorage.setItem('auth_token', token);
-      await AsyncStorage.setItem('auth_user', JSON.stringify(user));
-      
-      set({ user, token, isLoading: false });
-      return true;
-    } catch (err: any) {
-      set({ 
-        error: err.response?.data?.message || 'Registration failed. Please try again.',
+        error: err.response?.data?.message || 'Login failed. Please check your details.',
         isLoading: false 
       });
       return false;

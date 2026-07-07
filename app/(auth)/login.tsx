@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
-import { useRouter, Link } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useAuthStore } from '../../store/useAuthStore';
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [loginCode, setLoginCode] = useState('');
   const { login, isLoading, error, clearError } = useAuthStore();
   const router = useRouter();
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Please enter email and password');
+    if (!phone || !loginCode) {
+      Alert.alert('Error', 'Please enter your mobile number and login code');
       return;
     }
     
     try {
-      const success = await login(email, password);
+      const success = await login(phone, loginCode);
       if (success) {
         // Router will automatically redirect based on _layout.tsx logic
         console.log('Login successful');
@@ -37,27 +37,31 @@ export default function LoginScreen() {
         </View>
       ) : null}
 
+      <Text style={styles.label}>Mobile Number</Text>
       <TextInput
         style={styles.input}
-        placeholder="Email Address"
-        value={email}
+        placeholder="Enter your registered mobile number"
+        value={phone}
         onChangeText={(text) => {
-          setEmail(text);
+          setPhone(text);
           if (error) clearError();
         }}
-        keyboardType="email-address"
+        keyboardType="phone-pad"
         autoCapitalize="none"
       />
 
+      <Text style={styles.label}>Wholesaler Code</Text>
       <TextInput
         style={styles.input}
-        placeholder="Password"
-        value={password}
+        placeholder="Enter the 6-digit code"
+        value={loginCode}
         onChangeText={(text) => {
-          setPassword(text);
+          setLoginCode(text);
           if (error) clearError();
         }}
+        keyboardType="number-pad"
         secureTextEntry
+        maxLength={6}
       />
 
       <TouchableOpacity 
@@ -73,12 +77,7 @@ export default function LoginScreen() {
       </TouchableOpacity>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>Don't have an account? </Text>
-        <Link href="/(auth)/register" asChild>
-          <TouchableOpacity>
-            <Text style={styles.linkText}>Register here</Text>
-          </TouchableOpacity>
-        </Link>
+        <Text style={styles.footerText}>Not a partner yet? Contact your wholesaler for an invitation code.</Text>
       </View>
     </View>
   );
@@ -104,12 +103,18 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     textAlign: 'center',
   },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#334155',
+    marginBottom: 8,
+  },
   input: {
     backgroundColor: '#fff',
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderRadius: 8,
-    marginBottom: 16,
+    marginBottom: 20,
     borderWidth: 1,
     borderColor: '#e2e8f0',
     fontSize: 16,
@@ -130,7 +135,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fef2f2',
     padding: 12,
     borderRadius: 8,
-    marginBottom: 16,
+    marginBottom: 20,
     borderWidth: 1,
     borderColor: '#fecaca',
   },
@@ -142,15 +147,12 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 24,
+    marginTop: 32,
   },
   footerText: {
     color: '#64748b',
     fontSize: 14,
-  },
-  linkText: {
-    color: '#2563eb',
-    fontSize: 14,
-    fontWeight: '600',
+    textAlign: 'center',
+    lineHeight: 20,
   },
 });
