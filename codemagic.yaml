@@ -18,7 +18,7 @@ workflows:
       - name: Install dependencies
         script: npm install --legacy-peer-deps
       - name: Expo Prebuild
-        script: CI=1 npx expo prebuild --platform android --clean
+        script: npx expo prebuild --platform android --clean --non-interactive
       - name: Build APK
         script: |
           cd android
@@ -51,7 +51,7 @@ workflows:
       - name: Install dependencies
         script: npm install --legacy-peer-deps
       - name: Expo Prebuild
-        script: CI=1 npx expo prebuild --platform android --clean
+        script: npx expo prebuild --platform android --clean --non-interactive
       - name: Build AAB
         script: |
           cd android
