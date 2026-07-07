@@ -29,7 +29,7 @@
     "typescript": "~6.0.3"
   },
   "scripts": {
-    "postinstall": "cd backend && npm install && cd ../web && npm install",
+    "postinstall": "cd backend && npm install && npx prisma generate && npm run build && cd ../web && npm install",
     "build": "cd backend && npm run build && cd ../web && npm run build",
     "start": "expo start",
     "android": "expo run:android",
