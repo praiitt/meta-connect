@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import Products from './pages/Products';
 import Orders from './pages/Orders';
+import BuildHistory from './pages/BuildHistory';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/users" element={<Users />} />
           <Route path="/products" element={<Products />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/builds" element={<BuildHistory />} />
         </Route>
         
         <Route path="*" element={<Navigate to="/" replace />} />

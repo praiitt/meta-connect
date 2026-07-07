@@ -1,6 +1,6 @@
 import { Outlet, Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
-import { LayoutDashboard, Users, ShoppingBag, Package, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, ShoppingBag, Package, LogOut, History } from 'lucide-react';
 
 export default function AdminLayout() {
   const { token, logout } = useAuthStore();
@@ -15,6 +15,7 @@ export default function AdminLayout() {
     { label: 'Users', path: '/users', icon: Users },
     { label: 'Products', path: '/products', icon: ShoppingBag },
     { label: 'Orders', path: '/orders', icon: Package },
+    { label: 'Build History', path: '/builds', icon: History },
   ];
 
   return (

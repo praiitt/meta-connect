@@ -13,6 +13,7 @@ import authRoutes from './routes/auth';
 import productRoutes from './routes/products';
 import orderRoutes from './routes/orders';
 import userRoutes from './routes/users';
+import buildRoutes from './routes/builds';
 
 const app = express();
 const prisma = new PrismaClient();
@@ -26,6 +27,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/builds', buildRoutes);
 
 // API Health Check
 app.get('/api/health', (req, res) => {
