@@ -1,0 +1,14 @@
+  --non-interactive is not supported, use $CI=1 instead
+EmptyJsonFileError: Cannot parse an empty JSON string
+└─ File: /opt/ad/.vibe_data/b5f35e45-44ea-4e44-b954-5e07369d3dab/workspace/package.json
+EmptyJsonFileError: Cannot parse an empty JSON string
+└─ File: /opt/ad/.vibe_data/b5f35e45-44ea-4e44-b954-5e07369d3dab/workspace/package.json
+    at assertEmptyJsonString (/opt/ad/.vibe_data/b5f35e45-44ea-4e44-b954-5e07369d3dab/workspace/node_modules/@expo/json-file/build/JsonFile.js:390:15)
+    at parseJsonString (/opt/ad/.vibe_data/b5f35e45-44ea-4e44-b954-5e07369d3dab/workspace/node_modules/@expo/json-file/build/JsonFile.js:180:5)
+    at JsonFile.read (/opt/ad/.vibe_data/b5f35e45-44ea-4e44-b954-5e07369d3dab/workspace/node_modules/@expo/json-file/build/JsonFile.js:160:12)
+    at getPackageJsonAndPath (/opt/ad/.vibe_data/b5f35e45-44ea-4e44-b954-5e07369d3dab/workspace/node_modules/@expo/config/build/Config.js:294:31)
+    at getConfig (/opt/ad/.vibe_data/b5f35e45-44ea-4e44-b954-5e07369d3dab/workspace/node_modules/@expo/config/build/Config.js:205:42)
+    at prebuildAsync (/opt/ad/.vibe_data/b5f35e45-44ea-4e44-b954-5e07369d3dab/workspace/node_modules/expo/node_modules/@expo/cli/build/src/prebuild/prebuildAsync.js:96:51)
+    at /opt/ad/.vibe_data/b5f35e45-44ea-4e44-b954-5e07369d3dab/workspace/node_modules/expo/node_modules/@expo/cli/build/src/prebuild/index.js:109:16
+    at expoPrebuild (/opt/ad/.vibe_data/b5f35e45-44ea-4e44-b954-5e07369d3dab/workspace/node_modules/expo/node_modules/@expo/cli/build/src/prebuild/index.js:119:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)

@@ -10,6 +10,13 @@ export default function CartScreen() {
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
 
+  const getTotalWeight = () => {
+    return items.reduce((total, item) => {
+      const w = item.product.weightKg || 0;
+      return total + (w * item.quantity);
+    }, 0);
+  };
+
   const handleCheckout = async () => {
     if (items.length === 0) return;
 
@@ -42,7 +49,7 @@ export default function CartScreen() {
       <View style={styles.itemInfo}>
         <Text style={styles.name}>{item.product.name}</Text>
         <Text style={styles.price}>${item.product.price.toFixed(2)} each</Text>
-        <Text style={styles.moq}>MOQ: {item.product.moq}</Text>
+        <Text style={styles.moq}>MOQ: {item.product.moq}{item.product.weightKg ? ` • Weight: ${item.product.weightKg} kg` : ''}</Text>
       </View>
       
       <View style={styles.actions}>
@@ -87,8 +94,14 @@ export default function CartScreen() {
       
       {items.length > 0 && (
         <View style={styles.footer}>
+          {getTotalWeight() > 0 && (
+            <View style={styles.totalRow}>
+              <Text style={styles.totalLabel}>Total Weight:</Text>
+              <Text style={styles.totalValue}>{getTotalWeight().toFixed(2)} kg</Text>
+            </View>
+          )}
           <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Total:</Text>
+            <Text style={styles.totalLabel}>Total Amount:</Text>
             <Text style={styles.totalValue}>${getCartTotal().toFixed(2)}</Text>
           </View>
           <TouchableOpacity 

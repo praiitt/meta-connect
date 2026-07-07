@@ -29,13 +29,13 @@ router.get('/:id', authenticate, requireApproved, async (req, res) => {
 // Admin: Create product
 router.post('/', authenticate, requireAdmin, async (req, res) => {
   try {
-    const { name, description, price, moq, sku, inStock, imageUrl } = req.body;
+    const { name, description, price, pricePerKg, isPricePerKg, moq, sku, inStock, imageUrl, weightKg } = req.body;
     const product = await prisma.product.create({
-      data: { name, description, price, moq, sku, inStock, imageUrl },
+      data: { name, description, price, pricePerKg, isPricePerKg, moq, sku, inStock, imageUrl, weightKg },
     });
     res.status(201).json(product);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error', error: String(error) });
   }
 });
 

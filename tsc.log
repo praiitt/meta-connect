@@ -1,0 +1,4 @@
+web/src/api/client.ts(7,28): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+web/src/api/client.ts(10,18): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+web/src/main.tsx(3,8): error TS2882: Cannot find module or type declarations for side-effect import of './index.css'.
+web/src/main.tsx(4,17): error TS5097: An import path can only end with a '.tsx' extension when 'allowImportingTsExtensions' is enabled.

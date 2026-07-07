@@ -7,6 +7,7 @@ export interface Product {
   price: number;
   moq: number;
   sku: string | null;
+  weightKg?: number | null;
   inStock: boolean;
   imageUrl: string | null;
 }

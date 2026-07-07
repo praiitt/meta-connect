@@ -42,6 +42,7 @@ export default function CatalogScreen() {
       <View style={styles.info}>
         <Text style={styles.name}>{item.name}</Text>
         {item.sku && <Text style={styles.sku}>SKU: {item.sku}</Text>}
+        {item.weightKg != null && <Text style={styles.sku}>Weight: {item.weightKg} kg</Text>}
         <Text style={styles.price}>${item.price.toFixed(2)}</Text>
         <Text style={styles.moq}>Minimum Order: {item.moq}</Text>
         

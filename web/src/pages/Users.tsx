@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '../api/client';
-import { Check, X, ShieldAlert, Loader2, Plus, UserPlus } from 'lucide-react';
+import { Check, X, ShieldAlert, Loader2, UserPlus } from 'lucide-react';
 
 interface User {
   id: string;

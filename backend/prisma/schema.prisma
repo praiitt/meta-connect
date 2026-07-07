@@ -24,17 +24,20 @@ model User {
 }
 
 model Product {
-  id          String      @id @default(uuid())
-  name        String
-  description String?
-  price       Float
-  moq         Int         @default(1)
-  sku         String?     @unique
-  inStock     Boolean     @default(true)
-  imageUrl    String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  orderItems  OrderItem[]
+  id           String      @id @default(uuid())
+  name         String
+  description  String?
+  price        Float
+  pricePerKg   Float?
+  isPricePerKg Boolean     @default(false)
+  moq          Int         @default(1)
+  sku          String?     @unique
+  inStock      Boolean     @default(true)
+  imageUrl     String?
+  weightKg     Float?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  orderItems   OrderItem[]
 }
 
 model Order {
