@@ -12,50 +12,28 @@ workflows:
     scripts:
       - name: Set API backend URL
         script: |
-          set -x
-          echo "🔧 Setting up environment variables..."
           echo "BACKEND_URL=${BACKEND_URL:-https://api-metal-connect.dev.rraasi.com}" >> .env
           echo "API_BASE_URL=${BACKEND_URL:-https://api-metal-connect.dev.rraasi.com}" >> .env
           echo "EXPO_PUBLIC_API_URL=${BACKEND_URL:-https://api-metal-connect.dev.rraasi.com}" >> .env
-          echo "✅ Environment variables configured"
-          cat .env
-
       - name: Install dependencies
-        script: |
-          set -x
-          echo "📦 Installing npm dependencies..."
-          npm install --legacy-peer-deps --verbose
-          echo "✅ Dependencies installed successfully"
-
+        script: npm install --legacy-peer-deps
       - name: Expo Prebuild
-        script: |
-          set -x
-          echo "🏗️ Running Expo prebuild for Android..."
-          npx expo prebuild --platform android --clean --non-interactive
-          echo "✅ Expo prebuild completed"
-
+        script: npx expo prebuild --platform android --clean --non-interactive
       - name: Build APK
         script: |
-          set -x
-          echo "🔨 Building Android APK..."
           cd android
-          ./gradlew assembleRelease -x lint --info --stacktrace
-          echo "✅ APK build completed"
-          ls -lh app/build/outputs/apk/release/
-
+          ./gradlew assembleRelease -x lint
     artifacts:
       - android/app/build/outputs/apk/release/app-release.apk
-
     publishing:
       scripts:
-        - name: Notify Codemagic webhook
+        - name: Notify build complete
           script: |
-            echo "📢 Sending build status to Codemagic webhook..."
             curl -s -X POST \
               -H "Content-Type: application/json" \
-              -d "{\"buildId\": \"$CM_BUILD_ID\", \"status\": \"$CM_BUILD_STEP_STATUS\", \"appId\": \"$CM_PROJECT_ID\", \"artifacts\": \"$CM_ARTIFACT_LINKS\"}" \
-              https://api.codemagic.io/hooks/6a4cec8a4791b4f2088f13c3 || true
-            echo "✅ Codemagic webhook sent"
+              -H "x-webhook-secret: ad_codemagic_webhook_2025" \
+              -d "{\"buildId\": \"$CM_BUILD_ID\", \"status\": \"$CM_BUILD_STEP_STATUS\", \"appId\": \"$CM_PROJECT_ID\"}" \
+              https://ad.rraasi.com/api/webhooks/codemagic || true
 
   android-aab:
     name: Android AAB Build (Production / Play Store)
@@ -67,47 +45,25 @@ workflows:
     scripts:
       - name: Set API backend URL
         script: |
-          set -x
-          echo "🔧 Setting up environment variables..."
           echo "BACKEND_URL=${BACKEND_URL:-https://api-metal-connect.dev.rraasi.com}" >> .env
           echo "API_BASE_URL=${BACKEND_URL:-https://api-metal-connect.dev.rraasi.com}" >> .env
           echo "EXPO_PUBLIC_API_URL=${BACKEND_URL:-https://api-metal-connect.dev.rraasi.com}" >> .env
-          echo "✅ Environment variables configured"
-          cat .env
-
       - name: Install dependencies
-        script: |
-          set -x
-          echo "📦 Installing npm dependencies..."
-          npm install --legacy-peer-deps --verbose
-          echo "✅ Dependencies installed successfully"
-
+        script: npm install --legacy-peer-deps
       - name: Expo Prebuild
-        script: |
-          set -x
-          echo "🏗️ Running Expo prebuild for Android..."
-          npx expo prebuild --platform android --clean --non-interactive
-          echo "✅ Expo prebuild completed"
-
+        script: npx expo prebuild --platform android --clean --non-interactive
       - name: Build AAB
         script: |
-          set -x
-          echo "🔨 Building Android AAB..."
           cd android
-          ./gradlew bundleRelease -x lint --info --stacktrace
-          echo "✅ AAB build completed"
-          ls -lh app/build/outputs/bundle/release/
-
+          ./gradlew bundleRelease -x lint
     artifacts:
       - android/app/build/outputs/bundle/release/app-release.aab
-
     publishing:
       scripts:
-        - name: Notify Codemagic webhook
+        - name: Notify build complete
           script: |
-            echo "📢 Sending build status to Codemagic webhook..."
             curl -s -X POST \
               -H "Content-Type: application/json" \
-              -d "{\"buildId\": \"$CM_BUILD_ID\", \"status\": \"$CM_BUILD_STEP_STATUS\", \"appId\": \"$CM_PROJECT_ID\", \"artifacts\": \"$CM_ARTIFACT_LINKS\"}" \
-              https://api.codemagic.io/hooks/6a4cec8a4791b4f2088f13c3 || true
-            echo "✅ Codemagic webhook sent"
+              -H "x-webhook-secret: ad_codemagic_webhook_2025" \
+              -d "{\"buildId\": \"$CM_BUILD_ID\", \"status\": \"$CM_BUILD_STEP_STATUS\", \"appId\": \"$CM_PROJECT_ID\"}" \
+              https://ad.rraasi.com/api/webhooks/codemagic || true
