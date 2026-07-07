@@ -19,21 +19,21 @@ workflows:
           echo "EXPO_PUBLIC_API_URL=${BACKEND_URL:-https://api-metal-connect.dev.rraasi.com}" >> .env
           echo "✅ Environment variables configured"
           cat .env
-      
+
       - name: Install dependencies
         script: |
           set -x
           echo "📦 Installing npm dependencies..."
           npm install --legacy-peer-deps --verbose
           echo "✅ Dependencies installed successfully"
-      
+
       - name: Expo Prebuild
         script: |
           set -x
           echo "🏗️ Running Expo prebuild for Android..."
           npx expo prebuild --platform android --clean --non-interactive
           echo "✅ Expo prebuild completed"
-      
+
       - name: Build APK
         script: |
           set -x
@@ -42,10 +42,10 @@ workflows:
           ./gradlew assembleRelease -x lint --info --stacktrace
           echo "✅ APK build completed"
           ls -lh app/build/outputs/apk/release/
-    
+
     artifacts:
       - android/app/build/outputs/apk/release/app-release.apk
-    
+
     publishing:
       scripts:
         - name: Notify Codemagic webhook
@@ -74,21 +74,21 @@ workflows:
           echo "EXPO_PUBLIC_API_URL=${BACKEND_URL:-https://api-metal-connect.dev.rraasi.com}" >> .env
           echo "✅ Environment variables configured"
           cat .env
-      
+
       - name: Install dependencies
         script: |
           set -x
           echo "📦 Installing npm dependencies..."
           npm install --legacy-peer-deps --verbose
           echo "✅ Dependencies installed successfully"
-      
+
       - name: Expo Prebuild
         script: |
           set -x
           echo "🏗️ Running Expo prebuild for Android..."
           npx expo prebuild --platform android --clean --non-interactive
           echo "✅ Expo prebuild completed"
-      
+
       - name: Build AAB
         script: |
           set -x
@@ -97,10 +97,10 @@ workflows:
           ./gradlew bundleRelease -x lint --info --stacktrace
           echo "✅ AAB build completed"
           ls -lh app/build/outputs/bundle/release/
-    
+
     artifacts:
       - android/app/build/outputs/bundle/release/app-release.aab
-    
+
     publishing:
       scripts:
         - name: Notify Codemagic webhook
