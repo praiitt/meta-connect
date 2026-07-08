@@ -17,7 +17,8 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.metalconnect"
+      "package": "com.anonymous.metalconnect",
+      "kotlinVersion": "2.2.0"
     },
     "web": {
       "favicon": "./assets/favicon.png",
