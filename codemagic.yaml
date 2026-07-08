@@ -19,7 +19,7 @@ workflows:
         script: npm install --legacy-peer-deps
       - name: Expo Prebuild
         script: npx expo prebuild --platform android --clean --non-interactive
-      - name: Build APK
+      - name: Patch Android Build
         script: |
           cd android
           sed -i.bak -e 's/gradle-.*-all.zip/gradle-8.10.2-all.zip/' gradle/wrapper/gradle-wrapper.properties
@@ -28,22 +28,11 @@ workflows:
           sed -i.bak -e '/enableBundleCompression = /d' app/build.gradle
           echo '' >> gradle.properties
           echo 'kotlinVersion=2.1.20' >> gradle.properties
-          echo 'allprojects {' >> build.gradle
-          echo '    configurations.all {' >> build.gradle
-          echo '        resolutionStrategy {' >> build.gradle
-          echo '            eachDependency { DependencyResolveDetails details ->' >> build.gradle
-          echo '                if (details.requested.group == "io.github.lukmccall.pika" && details.requested.name == "pika-compiler") {' >> build.gradle
-          echo '                    details.useVersion("0.3.2-2.1.20")' >> build.gradle
-          echo '                }' >> build.gradle
-          echo '                if (details.requested.group == "org.jetbrains.kotlin" && details.requested.name == "kotlin-compose-compiler-plugin-embeddable") {' >> build.gradle
-          echo '                    details.useVersion("2.1.20")' >> build.gradle
-          echo '                }' >> build.gradle
-          echo '            }' >> build.gradle
-          echo '        }' >> build.gradle
-          echo '    }' >> build.gradle
-          echo '}' >> build.gradle
-
-          node -e "const fs=require('fs'); let s=fs.readFileSync('settings.gradle','utf8'); s=s.replace('pluginManagement {', 'pluginManagement {\n  resolutionStrategy {\n    eachPlugin {\n      if (requested.id.id == \"org.jetbrains.kotlin.android\") {\n        useVersion(\"2.1.20\");\n      }\n    }\n  }\n'); fs.writeFileSync('settings.gradle', s);"
+          cd ..
+          node patch_android.js
+      - name: Build APK
+        script: |
+          cd android
           ./gradlew assembleRelease -x lint
     artifacts:
       - android/app/build/outputs/apk/release/app-release.apk
@@ -51,11 +40,7 @@ workflows:
       scripts:
         - name: Notify build complete
           script: |
-            curl -s -X POST \
-              -H "Content-Type: application/json" \
-              -H "x-webhook-secret: ad_codemagic_webhook_2025" \
-              -d "{\"buildId\": \"$CM_BUILD_ID\", \"status\": \"$CM_BUILD_STEP_STATUS\", \"appId\": \"$CM_PROJECT_ID\"}" \
-              https://ad.rraasi.com/api/webhooks/codemagic || true
+            curl -s -X POST               -H Content-Type: application/json               -H x-webhook-secret: ad_codemagic_webhook_2025               -d {"buildId": "", "status": "", "appId": ""}               https://ad.rraasi.com/api/webhooks/codemagic || true
 
   android-aab:
     name: Android AAB Build (Production / Play Store)
@@ -84,8 +69,4 @@ workflows:
       scripts:
         - name: Notify build complete
           script: |
-            curl -s -X POST \
-              -H "Content-Type: application/json" \
-              -H "x-webhook-secret: ad_codemagic_webhook_2025" \
-              -d "{\"buildId\": \"$CM_BUILD_ID\", \"status\": \"$CM_BUILD_STEP_STATUS\", \"appId\": \"$CM_PROJECT_ID\"}" \
-              https://ad.rraasi.com/api/webhooks/codemagic || true
+            curl -s -X POST               -H Content-Type: application/json               -H x-webhook-secret: ad_codemagic_webhook_2025               -d {"buildId": "", "status": "", "appId": ""}               https://ad.rraasi.com/api/webhooks/codemagic || true
