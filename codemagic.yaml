@@ -24,6 +24,7 @@ workflows:
           cd android
           sed -i.bak -e 's/gradle-.*-all.zip/gradle-8.10.2-all.zip/' gradle/wrapper/gradle-wrapper.properties
           sed -i.bak -e 's/gradle-.*-bin.zip/gradle-8.10.2-bin.zip/' gradle/wrapper/gradle-wrapper.properties
+          sed -i.bak -e '/hermesCommand = /d' app/build.gradle
           ./gradlew assembleRelease -x lint
     artifacts:
       - android/app/build/outputs/apk/release/app-release.apk
