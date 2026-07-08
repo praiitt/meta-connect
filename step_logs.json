@@ -1,0 +1,171 @@
+Downloading https://services.gradle.org/distributions/gradle-9.3.1-bin.zip
+.............10%.............20%.............30%.............40%.............50%.............60%.............70%.............80%.............90%.............100%
+
+Welcome to Gradle 9.3.1!
+
+Here are the highlights of this release:
+ - Test reporting improvements
+ - Error and warning improvements
+ - Build authoring improvements
+
+For more details see https://docs.gradle.org/9.3.1/release-notes.html
+
+Starting a Gradle Daemon (subsequent builds will be faster)
+&gt; Task :expo-gradle-plugin:expo-autolinking-plugin-shared:checkKotlinGradlePluginConfigurationErrors SKIPPED
+&gt; Task :expo-gradle-plugin:expo-autolinking-settings-plugin:checkKotlinGradlePluginConfigurationErrors SKIPPED
+&gt; Task :gradle-plugin:shared:checkKotlinGradlePluginConfigurationErrors
+&gt; Task :gradle-plugin:settings-plugin:checkKotlinGradlePluginConfigurationErrors
+&gt; Task :gradle-plugin:settings-plugin:pluginDescriptors
+&gt; Task :expo-gradle-plugin:expo-autolinking-settings-plugin:pluginDescriptors
+&gt; Task :expo-gradle-plugin:expo-autolinking-settings-plugin:processResources
+&gt; Task :gradle-plugin:settings-plugin:processResources
+&gt; Task :gradle-plugin:shared:processResources NO-SOURCE
+&gt; Task :expo-gradle-plugin:expo-autolinking-plugin-shared:processResources NO-SOURCE
+&gt; Task :gradle-plugin:shared:compileKotlin
+&gt; Task :gradle-plugin:shared:compileJava NO-SOURCE
+&gt; Task :gradle-plugin:shared:classes UP-TO-DATE
+&gt; Task :gradle-plugin:shared:jar
+&gt; Task :expo-gradle-plugin:expo-autolinking-plugin-shared:compileKotlin
+&gt; Task :expo-gradle-plugin:expo-autolinking-plugin-shared:compileJava NO-SOURCE
+&gt; Task :expo-gradle-plugin:expo-autolinking-plugin-shared:classes UP-TO-DATE
+&gt; Task :expo-gradle-plugin:expo-autolinking-plugin-shared:jar
+
+&gt; Task :gradle-plugin:settings-plugin:compileKotlin FAILED
+e: Incompatible classes were found in dependencies. Remove them from the classpath or use '-Xskip-metadata-version-check' to suppress errors
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/bean-serialization-services.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/configuration-cache-base.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/configuration-cache.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/configuration-problems-base.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/core-kotlin-extensions.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/core-serialization-codecs.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/declarative-dsl-core.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/declarative-dsl-evaluator.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/declarative-dsl-internal-utils.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/declarative-dsl-provider.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/declarative-dsl-tooling-models.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/dependency-management-serialization-codecs.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/encryption-services.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/flow-services.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/graph-isolation.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/graph-serialization.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/guava-serialization-codecs.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/isolated-action-services.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/kotlinx-coroutines-core.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.1.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/kotlinx-serialization-core.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/kotlinx-serialization-json.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/problems.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/project-features.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/stdlib-kotlin-extensions.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/stdlib-serialization-codecs.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/caches/9.3.1/generated-gradle-jars/gradle-api-9.3.1.jar!/META-INF/toolchains-jvm.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-reflect-2.2.21.jar!/META-INF/descriptors.jvm.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-reflect-2.2.21.jar!/META-INF/descriptors.runtime.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-reflect-2.2.21.jar!/META-INF/deserialization.common.jvm.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-reflect-2.2.21.jar!/META-INF/deserialization.common.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-reflect-2.2.21.jar!/META-INF/deserialization.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-reflect-2.2.21.jar!/META-INF/kotlin-metadata-jvm.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-reflect-2.2.21.jar!/META-INF/kotlin-metadata.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-reflect-2.2.21.jar!/META-INF/kotlin-reflection.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-reflect-2.2.21.jar!/META-INF/metadata.jvm.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/META-INF/kotlin-stdlib-jdk7.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/META-INF/kotlin-stdlib-jdk8.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/META-INF/kotlin-stdlib.kotlin_moduleModule was compiled with an incompatible version of Kotlin. The binary version of its metadata is 2.2.0, expected version is 1.9.0.
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:31:31 Class 'kotlin.collections.CollectionsKt__CollectionsKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/collections/CollectionsKt__CollectionsKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:31:87 Class 'kotlin.collections.CollectionsKt___CollectionsKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/collections/CollectionsKt___CollectionsKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:47:4 Class 'kotlin.jvm.JvmOverloads' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/jvm/JvmOverloads.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:71:5 Class 'kotlin.Unit' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/Unit.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:73:5 Class 'kotlin.Unit' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/Unit.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:88:24 Class 'kotlin.io.FilesKt__UtilsKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/io/FilesKt__UtilsKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:89:5 Class 'kotlin.Unit' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/Unit.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:97:11 Class 'kotlin.Unit' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/Unit.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:97:11 Class 'kotlin.collections.MapsKt___MapsKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/collections/MapsKt___MapsKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:97:22 Class 'kotlin.collections.MapsKt__MapsKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/collections/MapsKt__MapsKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:97:28 Class 'kotlin.collections.MapsKt__MapsKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/collections/MapsKt__MapsKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:98:16 Class 'kotlin.Unit' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/Unit.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:99:30 Class 'kotlin.Unit' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/Unit.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:154:52 Class 'kotlin.collections.CollectionsKt___CollectionsKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/collections/CollectionsKt___CollectionsKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:160:18 Class 'kotlin.Unit' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/Unit.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:162:20 Class 'kotlin.Unit' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/Unit.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:162:42 Class 'kotlin.io.FilesKt__FileReadWriteKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/io/FilesKt__FileReadWriteKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:162:53 Class 'kotlin.text.StringsKt__StringsJVMKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/text/StringsKt__StringsJVMKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:180:17 Class 'kotlin.Unit' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/Unit.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:180:17 Class 'kotlin.collections.CollectionsKt___CollectionsKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/collections/CollectionsKt___CollectionsKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:184:49 Class 'kotlin.io.FilesKt__FileReadWriteKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/io/FilesKt__FileReadWriteKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:185:21 Class 'kotlin.Unit' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/Unit.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:185:21 Class 'kotlin.io.FilesKt__FileReadWriteKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/io/FilesKt__FileReadWriteKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:200:13 Class 'kotlin.collections.CollectionsKt___CollectionsKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/collections/CollectionsKt___CollectionsKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:202:13 Class 'kotlin.collections.CollectionsKt___CollectionsKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/collections/CollectionsKt___CollectionsKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:203:13 Class 'kotlin.collections.CollectionsKt___CollectionsKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/collections/CollectionsKt___CollectionsKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:204:37 Class 'kotlin.Pair' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/Pair.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:204:37 Class 'kotlin.TuplesKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/TuplesKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:205:16 Class 'kotlin.collections.MapsKt__MapsKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/collections/MapsKt__MapsKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:209:16 Class 'kotlin.text.StringsKt__StringsJVMKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/text/StringsKt__StringsJVMKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsExtension.kt:209:65 Class 'kotlin.io.FilesKt__FileReadWriteKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/io/FilesKt__FileReadWriteKt.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsPlugin.kt:21:79 Class 'kotlin.reflect.KClass' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/reflect/KClass.class
+e: file:///Users/builder/clone/node_modules/@react-native/gradle-plugin/settings-plugin/src/main/kotlin/com/facebook/react/ReactSettingsPlugin.kt:21:79 Class 'kotlin.jvm.JvmClassMappingKt' was compiled with an incompatible version of Kotlin. The actual metadata version is 2.2.0, but the compiler version 1.9.0 can read versions up to 2.0.0.
+The class is loaded from /Users/builder/.gradle/wrapper/dists/gradle-9.3.1-bin/23ovyewtku6u96viwx3xl3oks/gradle-9.3.1/lib/kotlin-stdlib-2.2.21.jar!/kotlin/jvm/JvmClassMappingKt.class
+
+&gt; Task :expo-gradle-plugin:expo-autolinking-settings-plugin:compileKotlin
+&gt; Task :expo-gradle-plugin:expo-autolinking-settings-plugin:compileJava NO-SOURCE
+&gt; Task :expo-gradle-plugin:expo-autolinking-settings-plugin:classes
+&gt; Task :expo-gradle-plugin:expo-autolinking-settings-plugin:jar
+
+[Incubating] Problems report is available at: file:///Users/builder/clone/android/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':gradle-plugin:settings-plugin:compileKotlin'.
+&gt; A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   &gt; Compilation error. See log for more details
+
+* Try:
+&gt; Run with --stacktrace option to get the stack trace.
+&gt; Run with --info or --debug option to get more log output.
+&gt; Run with --scan to get full insights from a Build Scan (powered by Develocity).
+&gt; Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 58s
+13 actionable tasks: 13 executed
+
+
+Build failed :|
+Step 5 script `Build APK` exited with status code 1

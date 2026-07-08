@@ -17,8 +17,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.metalconnect",
-      "kotlinVersion": "2.2.0"
+      "package": "com.anonymous.metalconnect"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -32,14 +31,12 @@
         "expo-build-properties",
         {
           "android": {
-            "kotlinVersion": "2.2.0",
             "compileSdkVersion": 34,
             "targetSdkVersion": 34,
             "buildToolsVersion": "34.0.0"
           }
         }
-      ],
-      "./expo-plugins/withKotlinFix.js"
+      ]
     ]
   }
 }
