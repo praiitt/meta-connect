@@ -28,18 +28,16 @@ workflows:
           sed -i.bak -e '/enableBundleCompression = /d' app/build.gradle
           echo '' >> gradle.properties
           echo 'kotlinVersion=2.1.20' >> gradle.properties
-          
-          cat << 'INNER_EOF' > temp_settings.gradle
-pluginManagement {
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == "org.jetbrains.kotlin.android") {
-                useVersion("2.1.20")
-            }
-        }
-    }
-}
-INNER_EOF
+
+          echo 'pluginManagement {' > temp_settings.gradle
+          echo '    resolutionStrategy {' >> temp_settings.gradle
+          echo '        eachPlugin {' >> temp_settings.gradle
+          echo '            if (requested.id.id == "org.jetbrains.kotlin.android") {' >> temp_settings.gradle
+          echo '                useVersion("2.1.20")' >> temp_settings.gradle
+          echo '            }' >> temp_settings.gradle
+          echo '        }' >> temp_settings.gradle
+          echo '    }' >> temp_settings.gradle
+          echo '}' >> temp_settings.gradle
           cat settings.gradle >> temp_settings.gradle
           mv temp_settings.gradle settings.gradle
           ./gradlew assembleRelease -x lint
