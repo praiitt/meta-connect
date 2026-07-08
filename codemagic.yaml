@@ -19,18 +19,15 @@ workflows:
         script: npm install --legacy-peer-deps
       - name: Expo Prebuild
         script: npx expo prebuild --platform android --clean --non-interactive
-      - name: Patch Kotlin version
+      - name: Clean Gradle cache
         script: |
-          # Add Kotlin 2.2.0 to gradle.properties
-          echo "kotlinVersion=2.2.0" >> android/gradle.properties
-          
-          # Add Kotlin Gradle Plugin to build.gradle
-          sed -i '' "s|classpath('com.facebook.react:react-native-gradle-plugin')|classpath('com.facebook.react:react-native-gradle-plugin')\n    classpath('org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0')|g" android/build.gradle || \
-          sed -i "s|classpath('com.facebook.react:react-native-gradle-plugin')|classpath('com.facebook.react:react-native-gradle-plugin')\n    classpath('org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0')|g" android/build.gradle
+          cd android
+          ./gradlew clean --no-daemon
+          rm -rf ~/.gradle/caches/
       - name: Build APK
         script: |
           cd android
-          ./gradlew assembleRelease -x lint
+          ./gradlew assembleRelease --no-daemon --no-build-cache --refresh-dependencies -x lint
     artifacts:
       - android/app/build/outputs/apk/release/app-release.apk
     publishing:
@@ -60,18 +57,15 @@ workflows:
         script: npm install --legacy-peer-deps
       - name: Expo Prebuild
         script: npx expo prebuild --platform android --clean --non-interactive
-      - name: Patch Kotlin version
+      - name: Clean Gradle cache
         script: |
-          # Add Kotlin 2.2.0 to gradle.properties
-          echo "kotlinVersion=2.2.0" >> android/gradle.properties
-          
-          # Add Kotlin Gradle Plugin to build.gradle
-          sed -i '' "s|classpath('com.facebook.react:react-native-gradle-plugin')|classpath('com.facebook.react:react-native-gradle-plugin')\n    classpath('org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0')|g" android/build.gradle || \
-          sed -i "s|classpath('com.facebook.react:react-native-gradle-plugin')|classpath('com.facebook.react:react-native-gradle-plugin')\n    classpath('org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0')|g" android/build.gradle
+          cd android
+          ./gradlew clean --no-daemon
+          rm -rf ~/.gradle/caches/
       - name: Build AAB
         script: |
           cd android
-          ./gradlew bundleRelease -x lint
+          ./gradlew bundleRelease --no-daemon --no-build-cache --refresh-dependencies -x lint
     artifacts:
       - android/app/build/outputs/bundle/release/app-release.aab
     publishing:
