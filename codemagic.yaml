@@ -19,15 +19,10 @@ workflows:
         script: npm install --legacy-peer-deps
       - name: Expo Prebuild
         script: npx expo prebuild --platform android --clean --non-interactive
-      - name: Clean Gradle cache
-        script: |
-          cd android
-          ./gradlew clean --no-daemon
-          rm -rf ~/.gradle/caches/
       - name: Build APK
         script: |
           cd android
-          ./gradlew assembleRelease --no-daemon --no-build-cache --refresh-dependencies -x lint
+          ./gradlew assembleRelease -x lint
     artifacts:
       - android/app/build/outputs/apk/release/app-release.apk
     publishing:
@@ -57,15 +52,10 @@ workflows:
         script: npm install --legacy-peer-deps
       - name: Expo Prebuild
         script: npx expo prebuild --platform android --clean --non-interactive
-      - name: Clean Gradle cache
-        script: |
-          cd android
-          ./gradlew clean --no-daemon
-          rm -rf ~/.gradle/caches/
       - name: Build AAB
         script: |
           cd android
-          ./gradlew bundleRelease --no-daemon --no-build-cache --refresh-dependencies -x lint
+          ./gradlew bundleRelease -x lint
     artifacts:
       - android/app/build/outputs/bundle/release/app-release.aab
     publishing:
