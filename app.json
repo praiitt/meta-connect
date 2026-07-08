@@ -17,7 +17,8 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.metalconnect"
+      "package": "com.anonymous.metalconnect",
+      "kotlinVersion": "2.2.0"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -27,15 +28,18 @@
     "plugins": [
       "expo-router",
       "expo-status-bar",
-      "./expo-plugins/withKotlinFix.js",
       [
         "expo-build-properties",
         {
           "android": {
-            "kotlinVersion": "2.2.0"
+            "kotlinVersion": "2.2.0",
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 34,
+            "buildToolsVersion": "34.0.0"
           }
         }
-      ]
+      ],
+      "./expo-plugins/withKotlinFix.js"
     ]
   }
 }
