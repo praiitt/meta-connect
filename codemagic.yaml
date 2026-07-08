@@ -19,6 +19,14 @@ workflows:
         script: npm install --legacy-peer-deps
       - name: Expo Prebuild
         script: npx expo prebuild --platform android --clean --non-interactive
+      - name: Patch Kotlin version
+        script: |
+          # Add Kotlin 2.2.0 to gradle.properties
+          echo "kotlinVersion=2.2.0" >> android/gradle.properties
+          
+          # Add Kotlin Gradle Plugin to build.gradle
+          sed -i '' "s|classpath('com.facebook.react:react-native-gradle-plugin')|classpath('com.facebook.react:react-native-gradle-plugin')\n    classpath('org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0')|g" android/build.gradle || \
+          sed -i "s|classpath('com.facebook.react:react-native-gradle-plugin')|classpath('com.facebook.react:react-native-gradle-plugin')\n    classpath('org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0')|g" android/build.gradle
       - name: Build APK
         script: |
           cd android
@@ -52,6 +60,14 @@ workflows:
         script: npm install --legacy-peer-deps
       - name: Expo Prebuild
         script: npx expo prebuild --platform android --clean --non-interactive
+      - name: Patch Kotlin version
+        script: |
+          # Add Kotlin 2.2.0 to gradle.properties
+          echo "kotlinVersion=2.2.0" >> android/gradle.properties
+          
+          # Add Kotlin Gradle Plugin to build.gradle
+          sed -i '' "s|classpath('com.facebook.react:react-native-gradle-plugin')|classpath('com.facebook.react:react-native-gradle-plugin')\n    classpath('org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0')|g" android/build.gradle || \
+          sed -i "s|classpath('com.facebook.react:react-native-gradle-plugin')|classpath('com.facebook.react:react-native-gradle-plugin')\n    classpath('org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.0')|g" android/build.gradle
       - name: Build AAB
         script: |
           cd android
