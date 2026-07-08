@@ -33,8 +33,7 @@
           "android": {
             "compileSdkVersion": 34,
             "targetSdkVersion": 34,
-            "buildToolsVersion": "34.0.0",
-            "kotlinVersion": "2.2.0"
+            "buildToolsVersion": "34.0.0"
           }
         }
       ]
