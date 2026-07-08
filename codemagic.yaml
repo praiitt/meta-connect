@@ -19,6 +19,10 @@ workflows:
         script: npm install --legacy-peer-deps
       - name: Expo Prebuild
         script: npx expo prebuild --platform android --clean --non-interactive
+      - name: Fix Gradle version for Kotlin 1.9.24 compatibility
+        script: |
+          sed -i '' 's/gradle-9\.3\.1-bin\.zip/gradle-8.10.2-bin.zip/g' android/gradle/wrapper/gradle-wrapper.properties
+          echo "✅ Gradle version downgraded to 8.10.2"
       - name: Build APK
         script: |
           cd android
@@ -52,6 +56,10 @@ workflows:
         script: npm install --legacy-peer-deps
       - name: Expo Prebuild
         script: npx expo prebuild --platform android --clean --non-interactive
+      - name: Fix Gradle version for Kotlin 1.9.24 compatibility
+        script: |
+          sed -i '' 's/gradle-9\.3\.1-bin\.zip/gradle-8.10.2-bin.zip/g' android/gradle/wrapper/gradle-wrapper.properties
+          echo "✅ Gradle version downgraded to 8.10.2"
       - name: Build AAB
         script: |
           cd android
