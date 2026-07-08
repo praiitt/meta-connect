@@ -17,8 +17,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.metalconnect",
-      "kotlinVersion": "2.2.0"
+      "package": "com.anonymous.metalconnect"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -34,7 +33,8 @@
           "android": {
             "compileSdkVersion": 34,
             "targetSdkVersion": 34,
-            "buildToolsVersion": "34.0.0"
+            "buildToolsVersion": "34.0.0",
+            "kotlinVersion": "2.2.0"
           }
         }
       ]
