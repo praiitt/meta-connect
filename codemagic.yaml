@@ -29,17 +29,7 @@ workflows:
           echo '' >> gradle.properties
           echo 'kotlinVersion=2.1.20' >> gradle.properties
 
-          echo 'pluginManagement {' > temp_settings.gradle
-          echo '    resolutionStrategy {' >> temp_settings.gradle
-          echo '        eachPlugin {' >> temp_settings.gradle
-          echo '            if (requested.id.id == "org.jetbrains.kotlin.android") {' >> temp_settings.gradle
-          echo '                useVersion("2.1.20")' >> temp_settings.gradle
-          echo '            }' >> temp_settings.gradle
-          echo '        }' >> temp_settings.gradle
-          echo '    }' >> temp_settings.gradle
-          echo '}' >> temp_settings.gradle
-          cat settings.gradle >> temp_settings.gradle
-          mv temp_settings.gradle settings.gradle
+          node -e "const fs=require('fs'); let s=fs.readFileSync('settings.gradle','utf8'); s=s.replace('pluginManagement {', 'pluginManagement {\n  resolutionStrategy {\n    eachPlugin {\n      if (requested.id.id == \"org.jetbrains.kotlin.android\") {\n        useVersion(\"2.1.20\");\n      }\n    }\n  }\n'); fs.writeFileSync('settings.gradle', s);"
           ./gradlew assembleRelease -x lint
     artifacts:
       - android/app/build/outputs/apk/release/app-release.apk
