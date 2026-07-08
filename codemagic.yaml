@@ -28,17 +28,20 @@ workflows:
           sed -i.bak -e '/enableBundleCompression = /d' app/build.gradle
           echo '' >> gradle.properties
           echo 'kotlinVersion=2.1.20' >> gradle.properties
-          sed -i.bak -e '1i\
-pluginManagement {\
-    resolutionStrategy {\
-        eachPlugin {\
-            if (requested.id.id == "org.jetbrains.kotlin.android") {\
-                useVersion("2.1.20")\
-            }\
-        }\
-    }\
-}\
-' settings.gradle
+          
+          cat << 'INNER_EOF' > temp_settings.gradle
+pluginManagement {
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "org.jetbrains.kotlin.android") {
+                useVersion("2.1.20")
+            }
+        }
+    }
+}
+INNER_EOF
+          cat settings.gradle >> temp_settings.gradle
+          mv temp_settings.gradle settings.gradle
           ./gradlew assembleRelease -x lint
     artifacts:
       - android/app/build/outputs/apk/release/app-release.apk
