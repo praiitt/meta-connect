@@ -12,11 +12,13 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "@types/multer": "^2.2.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^16.6.1",
     "express": "^4.22.2",
-    "jsonwebtoken": "^9.0.3"
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.2.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -30,5 +32,8 @@
     "tsx": "^4.11.0",
     "typescript": "^5.9.3"
   },
-  "description": ""
-, "prisma": { "seed": "ts-node prisma/seed.ts" }}
+  "description": "",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  }
+}

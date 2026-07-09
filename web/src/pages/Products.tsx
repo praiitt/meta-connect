@@ -32,6 +32,10 @@ const Products = () => {
   const [saving, setSaving] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   
+  // Upload state
+  const [uploading, setUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  
   // Form state
   const [formData, setFormData] = useState({
     name: '',
@@ -104,6 +108,7 @@ const Products = () => {
         imageUrl: product.imageUrl || '',
         inStock: product.inStock,
       });
+      setImagePreview(product.imageUrl);
     } else {
       setEditingProduct(null);
       setFormData({
@@ -118,6 +123,7 @@ const Products = () => {
         imageUrl: '',
         inStock: true,
       });
+      setImagePreview(null);
     }
     setIsModalOpen(true);
   };
@@ -125,6 +131,52 @@ const Products = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingProduct(null);
+    setImagePreview(null);
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('Invalid file type. Only JPEG, PNG, WebP, and GIF are allowed.');
+      return;
+    }
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File too large. Maximum size is 5MB.');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const response = await apiClient.post('/upload/product-image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      const { imageUrl } = response.data;
+      setFormData((prev) => ({ ...prev, imageUrl }));
+      setImagePreview(imageUrl);
+      alert('Image uploaded successfully!');
+    } catch (error: any) {
+      console.error('Upload failed:', error);
+      alert(error.response?.data?.message || 'Failed to upload image');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setFormData((prev) => ({ ...prev, imageUrl: '' }));
+    setImagePreview(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -469,17 +521,64 @@ const Products = () => {
                 />
               </div>
 
-              {/* Image URL */}
+              {/* Product Image Upload */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Image URL
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Product Image
                 </label>
-                <input
-                  type="url"
-                  value={formData.imageUrl}
-                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900"
-                />
+                
+                {imagePreview ? (
+                  <div className="space-y-3">
+                    <div className="relative inline-block">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-40 h-40 object-cover rounded-lg border-2 border-slate-200"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleRemoveImage}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 shadow-lg"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                    <div className="text-xs text-slate-500">
+                      {formData.imageUrl}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center">
+                    <Package className="w-12 h-12 mx-auto text-slate-400 mb-3" />
+                    <label
+                      htmlFor="image-upload"
+                      className="cursor-pointer inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg transition-colors"
+                    >
+                      {uploading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <Plus size={16} />
+                          Choose Image
+                        </>
+                      )}
+                    </label>
+                    <input
+                      id="image-upload"
+                      type="file"
+                      accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                      onChange={handleImageUpload}
+                      disabled={uploading}
+                      className="hidden"
+                    />
+                    <p className="text-xs text-slate-500 mt-2">
+                      JPEG, PNG, WebP, or GIF (max 5MB)
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* In Stock */}
