@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { apiClient } from '../api/client';
 import { Package, Truck, CheckCircle, XCircle, Clock, Eye, X, Download } from 'lucide-react';
-import { exportToCSV } from '../utils/csvExport';
+import { exportOrdersToCSV } from '../utils/csvExport';
 
 interface User {
   id: string;
@@ -61,17 +61,23 @@ export default function Orders() {
   }, []);
 
   const handleExport = () => {
-    const formattedData = orders.map((order) => ({
-      'Order ID': order.id,
-      'Date': new Date(order.createdAt).toLocaleDateString(),
-      'Customer Name': order.user.name,
-      'Company': order.user.company || 'N/A',
-      'Phone': order.user.phone || 'N/A',
-      'Status': order.status,
-      'Total Amount (₹)': order.totalAmount,
-      'Items Count': order.items.reduce((sum, item) => sum + item.quantity, 0),
+    // Transform to match the expected format for csvExport
+    const transformedOrders = orders.map(order => ({
+      ...order,
+      user: {
+        fullName: order.user.name,
+        companyName: order.user.company || undefined,
+        phoneNumber: order.user.phone || undefined
+      },
+      orderItems: order.items.map(item => ({
+        quantity: item.quantity,
+        product: {
+          name: item.product.name,
+          sku: item.product.sku || undefined
+        }
+      }))
     }));
-    exportToCSV(`orders_export_${new Date().toISOString().split('T')[0]}.csv`, formattedData);
+    exportOrdersToCSV(transformedOrders);
   };
 
   const handleUpdateStatus = async (orderId: string, newStatus: string) => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '../api/client';
 import { Check, X, ShieldAlert, Loader2, UserPlus, Download } from 'lucide-react';
-import { exportToCSV } from '../utils/csvExport';
+import { exportUsersToCSV } from '../utils/csvExport';
 
 interface User {
   id: string;
@@ -33,18 +33,29 @@ const Users = () => {
     fetchUsers();
   }, []);
 
-  const handleExport = () => {
-    const formattedData = users.map((user) => ({
-      'User ID': user.id,
-      'Name': user.name,
-      'Email': user.email,
-      'Phone': user.phone || 'N/A',
-      'Company': user.company || 'N/A',
-      'GST': user.gst || 'N/A',
-      'Role': user.role,
-      'Approval Status': user.approvalStatus,
-    }));
-    exportToCSV(`users_export_${new Date().toISOString().split('T')[0]}.csv`, formattedData);
+  const handleExport = async () => {
+    try {
+      // Fetch users with order statistics
+      const { data: usersWithStats } = await apiClient.get('/users/with-stats');
+      
+      // Transform to match the expected format for csvExport
+      const transformedUsers = usersWithStats.map((user: any) => ({
+        id: user.id,
+        fullName: user.name,
+        companyName: user.company || undefined,
+        phoneNumber: user.phone || undefined,
+        gstNumber: user.gst || undefined,
+        status: user.status,
+        createdAt: user.createdAt,
+        _count: user._count,
+        totalRevenue: user.totalRevenue
+      }));
+      
+      exportUsersToCSV(transformedUsers);
+    } catch (error) {
+      console.error('Failed to export users:', error);
+      alert('Failed to export users. Please try again.');
+    }
   };
 
   const fetchUsers = async () => {

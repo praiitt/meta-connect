@@ -28,6 +28,55 @@ router.get('/', authenticate, requireAdmin, async (req, res) => {
   }
 });
 
+// Admin: Get all users with order statistics (for CSV export)
+router.get('/with-stats', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const users = await prisma.user.findMany({
+      where: { role: 'CUSTOMER' },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        status: true,
+        phone: true,
+        company: true,
+        gst: true,
+        createdAt: true,
+        _count: {
+          select: { orders: true }
+        },
+        orders: {
+          where: { status: { not: 'CANCELLED' } },
+          select: { totalAmount: true }
+        }
+      }
+    });
+
+    const usersWithStats = users.map(user => {
+      const totalRevenue = user.orders.reduce((sum, order) => sum + order.totalAmount, 0);
+      return {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        status: user.status,
+        phone: user.phone,
+        company: user.company,
+        gst: user.gst,
+        createdAt: user.createdAt,
+        _count: user._count,
+        totalRevenue
+      };
+    });
+
+    res.json(usersWithStats);
+  } catch (error) {
+    console.error('Error fetching users with stats:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Admin: Invite a new retailer
 router.post('/invite', authenticate, requireAdmin, async (req, res) => {
   const { name, phone, company, gst } = req.body;
