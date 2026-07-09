@@ -143,17 +143,113 @@
 
 ---
 
+---
+
+### **Phase 5: Enhanced Dashboard Analytics** ✅
+**Status**: COMPLETE  
+**Implementation Date**: 2024-01-09
+
+**Features Delivered**:
+
+#### KPI Metric Cards:
+- ✅ Total Revenue (all-time, excluding cancelled orders)
+- ✅ Total Orders count with clickable link
+- ✅ Total Customers (approved retailers)
+- ✅ Pending Approvals count with alert styling
+
+#### Revenue Trend Chart:
+- ✅ Line chart showing last 30 days of revenue
+- ✅ Responsive Recharts integration
+- ✅ Formatted tooltips with currency and dates
+- ✅ Smooth animations and hover effects
+
+#### Order Status Distribution:
+- ✅ Pie chart showing orders by status
+- ✅ Color-coded segments (PENDING, CONFIRMED, SHIPPED, DELIVERED, CANCELLED)
+- ✅ Custom legend with counts
+- ✅ Empty state handling
+
+#### Top Products Table:
+- ✅ Top 5 products by units sold
+- ✅ Displays product name, quantity, and estimated revenue
+- ✅ Sortable and responsive design
+- ✅ Empty state messaging
+
+#### Backend Analytics API:
+- ✅ `GET /api/analytics/overview` — Core metrics aggregation
+- ✅ `GET /api/analytics/revenue-trend?days=30` — Time-series revenue data
+- ✅ `GET /api/analytics/top-products` — Best-selling products
+- ✅ Admin-only protected routes
+- ✅ Efficient Prisma aggregation queries
+
+**Files Created/Modified**:
+- `backend/src/routes/analytics.ts` — NEW (analytics endpoints)
+- `web/src/api/analytics.ts` — NEW (analytics API client)
+- `web/src/pages/Dashboard.tsx` — Complete analytics dashboard redesign
+- `backend/src/index.ts` — Registered analytics routes
+- `web/package.json` — Added recharts dependency
+
+**Technical Stack**:
+- ✅ Recharts for data visualization
+- ✅ Prisma aggregation for efficient queries
+- ✅ Responsive grid layout with Tailwind
+- ✅ Real-time data fetching with loading states
+
+---
+
+### **Phase 6: CSV Export** ✅
+**Status**: COMPLETE  
+**Implementation Date**: 2024-01-09
+
+**Features Delivered**:
+
+#### Orders CSV Export:
+- ✅ One-click export button with Download icon
+- ✅ Exports: Order ID, Customer, Company, Phone, Amount, Status, Date, Items
+- ✅ Filename format: `metal-connect-orders-YYYY-MM-DD.csv`
+- ✅ Properly formatted for Excel/Google Sheets
+- ✅ Handles special characters and commas
+
+#### Users CSV Export:
+- ✅ One-click export button with Download icon
+- ✅ Exports: User ID, Name, Company, Phone, GST, Status, Date, Order Count, Revenue
+- ✅ Filename format: `metal-connect-users-YYYY-MM-DD.csv`
+- ✅ Includes aggregated order statistics
+- ✅ Real-time revenue calculation from backend
+
+#### Enhanced Backend Endpoint:
+- ✅ `GET /api/users/with-stats` — Users with order counts and revenue
+- ✅ Admin-only protected route
+- ✅ Efficient nested Prisma queries
+- ✅ Excludes cancelled orders from revenue
+
+**Files Created/Modified**:
+- `web/src/utils/csvExport.ts` — NEW (CSV generation utilities)
+- `web/src/pages/Orders.tsx` — Added export functionality
+- `web/src/pages/Users.tsx` — Added export with stats
+- `backend/src/routes/users.ts` — Added `/with-stats` endpoint
+- `web/package.json` — Added papaparse dependency
+
+**Technical Stack**:
+- ✅ PapaParse for CSV generation
+- ✅ TypeScript type safety
+- ✅ Client-side CSV generation (instant download)
+- ✅ Date formatting in Indian locale
+
+---
+
 ## 📊 **PROJECT STATISTICS**
 
 | Metric | Count |
 |--------|-------|
-| **Total Phases Completed** | 4 |
-| **Backend Routes** | 15+ |
+| **Total Phases Completed** | 6 |
+| **Backend Routes** | 20+ |
 | **Mobile Screens** | 8 |
 | **Admin Pages** | 6 |
 | **Database Models** | 4 (User, Product, Order, OrderItem) |
 | **NPM Packages Added (Backend)** | multer, expo-server-sdk, @types/multer |
 | **NPM Packages Added (Mobile)** | expo-notifications, expo-device |
+| **NPM Packages Added (Web)** | recharts, papaparse, @types/papaparse |
 
 ---
 
@@ -189,17 +285,7 @@
 
 ---
 
-### **Alternative: Phase 6 — CSV Export**
-If admin needs reporting features first:
-- Add "Export to CSV" button on Orders page
-- Generate CSV client-side using `papaparse`
-- Include: Order ID, Customer, Company, Total, Status, Date
-
-**Estimated Time**: 1-2 hours
-
----
-
-### **Alternative: Phase 7 — Product Categories**
+### **Recommended: Phase 7 — Product Categories**
 If catalog organization is a priority:
 - Add Category model to schema
 - CRUD routes for categories
