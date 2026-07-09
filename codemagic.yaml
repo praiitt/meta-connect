@@ -19,17 +19,6 @@ workflows:
         script: npm install --legacy-peer-deps
       - name: Expo Prebuild
         script: npx expo prebuild --platform android --clean --non-interactive
-      - name: Patch Android Build
-        script: |
-          cd android
-          sed -i.bak -e 's/gradle-.*-all.zip/gradle-8.10.2-all.zip/' gradle/wrapper/gradle-wrapper.properties
-          sed -i.bak -e 's/gradle-.*-bin.zip/gradle-8.10.2-bin.zip/' gradle/wrapper/gradle-wrapper.properties
-          sed -i.bak -e '/hermesCommand = /d' app/build.gradle
-          sed -i.bak -e '/enableBundleCompression = /d' app/build.gradle
-          echo '' >> gradle.properties
-          echo 'kotlinVersion=2.1.20' >> gradle.properties
-          cd ..
-          node patch_android.js
       - name: Build APK
         script: |
           cd android
@@ -40,7 +29,11 @@ workflows:
       scripts:
         - name: Notify build complete
           script: |
-            curl -s -X POST               -H Content-Type: application/json               -H x-webhook-secret: ad_codemagic_webhook_2025               -d {"buildId": "", "status": "", "appId": ""}               https://ad.rraasi.com/api/webhooks/codemagic || true
+            curl -s -X POST \
+              -H "Content-Type: application/json" \
+              -H "x-webhook-secret: ad_codemagic_webhook_2025" \
+              -d "{\"buildId\": \"$CM_BUILD_ID\", \"status\": \"$CM_BUILD_STEP_STATUS\", \"appId\": \"$CM_PROJECT_ID\"}" \
+              https://ad.rraasi.com/api/webhooks/codemagic || true
 
   android-aab:
     name: Android AAB Build (Production / Play Store)
@@ -69,4 +62,8 @@ workflows:
       scripts:
         - name: Notify build complete
           script: |
-            curl -s -X POST               -H Content-Type: application/json               -H x-webhook-secret: ad_codemagic_webhook_2025               -d {"buildId": "", "status": "", "appId": ""}               https://ad.rraasi.com/api/webhooks/codemagic || true
+            curl -s -X POST \
+              -H "Content-Type: application/json" \
+              -H "x-webhook-secret: ad_codemagic_webhook_2025" \
+              -d "{\"buildId\": \"$CM_BUILD_ID\", \"status\": \"$CM_BUILD_STEP_STATUS\", \"appId\": \"$CM_PROJECT_ID\"}" \
+              https://ad.rraasi.com/api/webhooks/codemagic || true
