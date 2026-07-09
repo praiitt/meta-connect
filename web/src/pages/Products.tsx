@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '../api/client';
-import { Package, Plus, Edit2, Trash2, Loader2, X, Search } from 'lucide-react';
+import { Package, Plus, Edit2, Trash2, Loader2, X, Search, Download } from 'lucide-react';
+import { exportToCSV } from '../utils/csvExport';
 
 interface Product {
   id: string;
@@ -54,6 +55,20 @@ const Products = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const handleExport = () => {
+    const formattedData = filteredProducts.map((product) => ({
+      'Product ID': product.id,
+      'Name': product.name,
+      'SKU': product.sku || 'N/A',
+      'Price (₹)': product.price,
+      'MOQ': product.moq,
+      'Weight (Kg)': product.weightKg || 'N/A',
+      'In Stock': product.inStock ? 'Yes' : 'No',
+      'Description': product.description || '',
+    }));
+    exportToCSV(`products_export_${new Date().toISOString().split('T')[0]}.csv`, formattedData);
+  };
 
   useEffect(() => {
     applyFilters();
@@ -254,10 +269,18 @@ const Products = () => {
           <Package className="w-8 h-8 text-slate-700" />
           <h1 className="text-2xl font-bold text-slate-900">Products</h1>
         </div>
-        <button
-          onClick={() => handleOpenModal()}
-          className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
-        >
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleExport}
+            className="flex items-center px-4 py-2 border border-gray-300 text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Export CSV
+          </button>
+          <button
+            onClick={() => handleOpenModal()}
+            className="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+          >
           <Plus size={18} />
           Add Product
         </button>

@@ -15,6 +15,7 @@ import orderRoutes from './routes/orders';
 import userRoutes from './routes/users';
 import buildRoutes from './routes/builds';
 import uploadRoutes from './routes/upload';
+import analyticsRoutes from './routes/analytics';
 
 const app = express();
 const prisma = new PrismaClient();
@@ -33,6 +34,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/builds', buildRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // API Health Check
 app.get('/api/health', (req, res) => {

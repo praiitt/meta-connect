@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { apiClient } from '../api/client';
-import { Package, Truck, CheckCircle, XCircle, Clock, Eye, X } from 'lucide-react';
+import { Package, Truck, CheckCircle, XCircle, Clock, Eye, X, Download } from 'lucide-react';
+import { exportToCSV } from '../utils/csvExport';
 
 interface User {
   id: string;
@@ -58,6 +59,20 @@ export default function Orders() {
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  const handleExport = () => {
+    const formattedData = orders.map((order) => ({
+      'Order ID': order.id,
+      'Date': new Date(order.createdAt).toLocaleDateString(),
+      'Customer Name': order.user.name,
+      'Company': order.user.company || 'N/A',
+      'Phone': order.user.phone || 'N/A',
+      'Status': order.status,
+      'Total Amount (₹)': order.totalAmount,
+      'Items Count': order.items.reduce((sum, item) => sum + item.quantity, 0),
+    }));
+    exportToCSV(`orders_export_${new Date().toISOString().split('T')[0]}.csv`, formattedData);
+  };
 
   const handleUpdateStatus = async (orderId: string, newStatus: string) => {
     const notifyUser = window.confirm(`Update order status to ${newStatus}? \n\nClick OK to also send a push notification to the user.`);
@@ -141,6 +156,13 @@ export default function Orders() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Wholesale Orders</h1>
+        <button
+          onClick={handleExport}
+          className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+        >
+          <Download className="w-5 h-5 mr-2" />
+          Export CSV
+        </button>
       </div>
 
       <div className="bg-white shadow rounded-lg overflow-hidden">

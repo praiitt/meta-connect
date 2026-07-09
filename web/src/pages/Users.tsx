@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '../api/client';
-import { Check, X, ShieldAlert, Loader2, UserPlus } from 'lucide-react';
+import { Check, X, ShieldAlert, Loader2, UserPlus, Download } from 'lucide-react';
+import { exportToCSV } from '../utils/csvExport';
 
 interface User {
   id: string;
@@ -31,6 +32,20 @@ const Users = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  const handleExport = () => {
+    const formattedData = users.map((user) => ({
+      'User ID': user.id,
+      'Name': user.name,
+      'Email': user.email,
+      'Phone': user.phone || 'N/A',
+      'Company': user.company || 'N/A',
+      'GST': user.gst || 'N/A',
+      'Role': user.role,
+      'Approval Status': user.approvalStatus,
+    }));
+    exportToCSV(`users_export_${new Date().toISOString().split('T')[0]}.csv`, formattedData);
+  };
 
   const fetchUsers = async () => {
     try {
@@ -95,13 +110,22 @@ const Users = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-900">Retailers Management</h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 flex items-center shadow-sm"
-        >
-          <UserPlus className="w-5 h-5 mr-2" />
-          Invite Retailer
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={handleExport}
+            className="px-4 py-2 border border-gray-300 text-gray-700 bg-white rounded-md hover:bg-gray-50 flex items-center shadow-sm"
+          >
+            <Download className="w-5 h-5 mr-2" />
+            Export CSV
+          </button>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 flex items-center shadow-sm"
+          >
+            <UserPlus className="w-5 h-5 mr-2" />
+            Invite Retailer
+          </button>
+        </div>
       </div>
 
       {error && (
