@@ -62,28 +62,24 @@ for (let i = 0; i < lines.length; i++) {
   }
 }
 
-// 3b. Add a robust configuration interception block BEFORE plugins are applied
-let buildscriptEndFound = false;
+// 3b. Inject composeCompiler configuration block to forcefully decouple compiler plugin version from Kotlin core version
+let composeApplyFound = false;
 for (let i = 0; i < lines.length; i++) {
-  if (lines[i].includes("apply plugin: 'com.android.library'") && !buildscriptEndFound) {
-    buildscriptEndFound = true;
-    const forceBlock = [
+  if (lines[i].includes("apply plugin: 'org.jetbrains.kotlin.plugin.compose'") && !composeApplyFound) {
+    composeApplyFound = true;
+    const composeConfig = [
       '',
-      '// AGGRESSIVE OVERRIDE FOR KOTLIN-EXTENSION',
-      'configurations.all {',
-      '    resolutionStrategy {',
-      '        force("org.jetbrains.kotlin:kotlin-compose-compiler-plugin-embeddable:2.1.20")',
-      '        force("org.jetbrains.kotlin:kotlin-stdlib:2.1.20")',
-      '        force("org.jetbrains.kotlin:kotlin-reflect:2.1.20")',
-      '    }',
-      '}',
+      '  // FORCE compose compiler to 2.1.20 so it doesnt default to 1.9.24',
+      '  composeCompiler {',
+      '      compilerPluginVersion = "2.1.20"',
+      '  }',
       ''
     ];
-    lines.splice(i, 0, ...forceBlock);
+    lines.splice(i + 1, 0, ...composeConfig);
     break;
   }
 }
 
 expoCore = lines.join('\n');
 fs.writeFileSync(expoCorePath, expoCore);
-console.log('Patched expo-modules-core/android/build.gradle');
+console.log('Patched expo-modules-core/android/build.gradle with composeCompiler block');
