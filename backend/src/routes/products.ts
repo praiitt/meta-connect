@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authenticate, requireAdmin, requireApproved } from '../middleware/auth';
+import { notifyAllRetailersNewProduct } from '../utils/notifications';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -29,10 +30,15 @@ router.get('/:id', authenticate, requireApproved, async (req, res) => {
 // Admin: Create product
 router.post('/', authenticate, requireAdmin, async (req, res) => {
   try {
-    const { name, description, price, pricePerKg, isPricePerKg, moq, sku, inStock, imageUrl, weightKg } = req.body;
+    const { name, description, price, pricePerKg, isPricePerKg, moq, sku, inStock, imageUrl, weightKg, notifyRetailers } = req.body;
     const product = await prisma.product.create({
       data: { name, description, price, pricePerKg, isPricePerKg, moq, sku, inStock, imageUrl, weightKg },
     });
+
+    if (notifyRetailers) {
+      await notifyAllRetailersNewProduct(product.name);
+    }
+
     res.status(201).json(product);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: String(error) });

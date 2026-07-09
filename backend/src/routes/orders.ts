@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authenticate, requireAdmin, requireApproved, AuthRequest } from '../middleware/auth';
+import { notifyUserOrderUpdate } from '../utils/notifications';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -80,12 +81,17 @@ router.get('/', authenticate, requireAdmin, async (req, res) => {
 
 // Admin: Update order status
 router.patch('/:id/status', authenticate, requireAdmin, async (req, res) => {
-  const { status } = req.body;
+  const { status, notifyUser } = req.body;
   try {
     const order = await prisma.order.update({
       where: { id: req.params.id },
       data: { status },
     });
+
+    if (notifyUser) {
+      await notifyUserOrderUpdate(order.userId, order.id, status);
+    }
+
     res.json(order);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });

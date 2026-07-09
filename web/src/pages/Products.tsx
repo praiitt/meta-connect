@@ -48,6 +48,7 @@ const Products = () => {
     weightKg: '',
     imageUrl: '',
     inStock: true,
+    notifyRetailers: false,
   });
 
   useEffect(() => {
@@ -122,6 +123,7 @@ const Products = () => {
         weightKg: '',
         imageUrl: '',
         inStock: true,
+        notifyRetailers: false,
       });
       setImagePreview(null);
     }
@@ -194,6 +196,7 @@ const Products = () => {
         weightKg: formData.weightKg ? parseFloat(formData.weightKg) : null,
         imageUrl: formData.imageUrl || null,
         inStock: formData.inStock,
+        notifyRetailers: formData.notifyRetailers,
       };
 
       if (editingProduct) {
@@ -594,6 +597,22 @@ const Products = () => {
                   In Stock
                 </label>
               </div>
+
+              {/* Notify Retailers (Only on Create) */}
+              {!editingProduct && (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="notifyRetailers"
+                    checked={formData.notifyRetailers}
+                    onChange={(e) => setFormData({ ...formData, notifyRetailers: e.target.checked })}
+                    className="w-4 h-4"
+                  />
+                  <label htmlFor="notifyRetailers" className="text-sm text-slate-700 font-medium">
+                    Send push notification to all approved retailers about this new product
+                  </label>
+                </div>
+              )}
 
               {/* Actions */}
               <div className="flex justify-end gap-3 pt-4">

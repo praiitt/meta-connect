@@ -79,4 +79,22 @@ router.patch('/:id/status', authenticate, requireAdmin, async (req, res) => {
   }
 });
 
+// User: Register Expo push token
+router.post('/register-push-token', authenticate, async (req, res) => {
+  const { pushToken } = req.body;
+  if (!req.user?.id) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  try {
+    await prisma.user.update({
+      where: { id: req.user.id },
+      data: { pushToken }
+    });
+    res.json({ message: 'Push token registered successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 export default router;

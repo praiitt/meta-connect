@@ -16,6 +16,7 @@ model User {
   role      Role     @default(CUSTOMER)
   status    Status   @default(PENDING)
   phone     String?  @unique
+  pushToken String?
   gst       String?
   company   String?
   createdAt DateTime @default(now())

@@ -60,13 +60,11 @@ export default function Orders() {
   }, []);
 
   const handleUpdateStatus = async (orderId: string, newStatus: string) => {
-    if (!window.confirm(`Are you sure you want to change this order status to ${newStatus}?`)) {
-      return;
-    }
+    const notifyUser = window.confirm(`Update order status to ${newStatus}? \n\nClick OK to also send a push notification to the user.`);
 
     try {
       setUpdating(orderId);
-      await apiClient.patch(`/orders/${orderId}/status`, { status: newStatus });
+      await apiClient.patch(`/orders/${orderId}/status`, { status: newStatus, notifyUser });
       setOrders((prev) =>
         prev.map((order) =>
           order.id === orderId ? { ...order, status: newStatus as Order['status'] } : order

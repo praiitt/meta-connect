@@ -2,6 +2,16 @@ import { Stack, useRouter, useSegments } from 'expo-router';
 import { useEffect } from 'react';
 import { useAuthStore } from '../store/useAuthStore';
 import { ActivityIndicator, View } from 'react-native';
+import * as Notifications from 'expo-notifications';
+import { registerForPushNotificationsAsync } from '../utils/registerPushToken';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function RootLayout() {
   const { user, isLoading, checkAuth } = useAuthStore();
@@ -11,6 +21,12 @@ export default function RootLayout() {
   useEffect(() => {
     checkAuth();
   }, []);
+
+  useEffect(() => {
+    if (user && user.status === 'APPROVED') {
+      registerForPushNotificationsAsync();
+    }
+  }, [user]);
 
   useEffect(() => {
     if (isLoading) return;
