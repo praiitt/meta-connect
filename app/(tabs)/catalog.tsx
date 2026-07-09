@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Image, Alert, TextInput } from 'react-native';
 import apiClient from '../../api/client';
 import { useCartStore, Product } from '../../store/useCartStore';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function CatalogScreen() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showInStockOnly, setShowInStockOnly] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
 
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [searchQuery, showInStockOnly, products]);
 
   const fetchProducts = async () => {
     try {
@@ -23,6 +30,26 @@ export default function CatalogScreen() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const applyFilters = () => {
+    let filtered = products;
+
+    // Search filter (by name or SKU)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(p => 
+        p.name.toLowerCase().includes(query) || 
+        (p.sku && p.sku.toLowerCase().includes(query))
+      );
+    }
+
+    // In Stock filter
+    if (showInStockOnly) {
+      filtered = filtered.filter(p => p.inStock);
+    }
+
+    setFilteredProducts(filtered);
   };
 
   const handleAddToCart = (product: Product) => {
@@ -47,7 +74,7 @@ export default function CatalogScreen() {
         <Text style={styles.moq}>Minimum Order: {item.moq}</Text>
         
         <TouchableOpacity 
-          style={styles.addButton} 
+          style={[styles.addButton, !item.inStock && styles.addButtonDisabled]} 
           onPress={() => handleAddToCart(item)}
           disabled={!item.inStock}
         >
@@ -67,13 +94,58 @@ export default function CatalogScreen() {
 
   return (
     <View style={styles.container}>
+      {/* Search Bar */}
+      <View style={styles.searchContainer}>
+        <Ionicons name="search" size={20} color="#64748B" style={styles.searchIcon} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search by name or SKU..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          placeholderTextColor="#94A3B8"
+        />
+        {searchQuery.length > 0 && (
+          <TouchableOpacity onPress={() => setSearchQuery('')}>
+            <Ionicons name="close-circle" size={20} color="#64748B" />
+          </TouchableOpacity>
+        )}
+      </View>
+
+      {/* In Stock Toggle */}
+      <View style={styles.filterRow}>
+        <TouchableOpacity 
+          style={styles.toggleButton}
+          onPress={() => setShowInStockOnly(!showInStockOnly)}
+        >
+          <Ionicons 
+            name={showInStockOnly ? "checkbox" : "square-outline"} 
+            size={20} 
+            color={showInStockOnly ? "#0066cc" : "#64748B"} 
+          />
+          <Text style={[styles.toggleText, showInStockOnly && styles.toggleTextActive]}>
+            In Stock Only
+          </Text>
+        </TouchableOpacity>
+        <Text style={styles.resultCount}>
+          {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''}
+        </Text>
+      </View>
+
       <FlatList
-        data={products}
+        data={filteredProducts}
         keyExtractor={(item) => item.id}
         renderItem={renderProduct}
         contentContainerStyle={styles.list}
         ListEmptyComponent={
-          <Text style={styles.emptyText}>No products available at the moment.</Text>
+          <View style={styles.emptyContainer}>
+            <Ionicons name="search-outline" size={48} color="#CBD5E1" />
+            <Text style={styles.emptyText}>
+              {searchQuery || showInStockOnly 
+                ? 'No products match your filters.' 
+                : 'No products available at the moment.'
+              }
+            </Text>
+          </View>
         }
       />
     </View>
@@ -83,6 +155,58 @@ export default function CatalogScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5' },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    marginHorizontal: 16,
+    marginTop: 12,
+    marginBottom: 8,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    paddingVertical: 12,
+    fontSize: 16,
+    color: '#0F172A',
+  },
+  filterRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: 'white',
+    marginHorizontal: 16,
+    marginBottom: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  toggleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  toggleText: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: '#64748B',
+    fontWeight: '500',
+  },
+  toggleTextActive: {
+    color: '#0066cc',
+    fontWeight: '600',
+  },
+  resultCount: {
+    fontSize: 12,
+    color: '#94A3B8',
+  },
   list: { padding: 16 },
   card: {
     backgroundColor: '#fff',
@@ -103,7 +227,7 @@ const styles = StyleSheet.create({
   },
   imagePlaceholder: {
     width: 120,
-    height: 140, // fixed height placeholder
+    height: 140,
     backgroundColor: '#eee',
     justifyContent: 'center',
     alignItems: 'center',
@@ -122,13 +246,22 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     alignItems: 'center',
   },
+  addButtonDisabled: {
+    backgroundColor: '#CBD5E1',
+  },
   addButtonText: {
     color: '#fff',
     fontWeight: 'bold',
   },
+  emptyContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 60,
+  },
   emptyText: {
     textAlign: 'center',
     color: '#666',
-    marginTop: 40,
+    marginTop: 16,
+    fontSize: 15,
   }
 });

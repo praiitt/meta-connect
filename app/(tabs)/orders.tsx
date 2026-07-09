@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, RefreshControl, TouchableOpacity, ScrollView } from 'react-native';
 import { useState, useEffect, useCallback } from 'react';
 import apiClient from '../../api/client';
 
@@ -21,11 +21,17 @@ type Order = {
   items: OrderItem[];
 };
 
+type StatusFilter = 'ALL' | 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
+
 export default function OrdersScreen() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState<StatusFilter>('ALL');
+
+  const statusFilters: StatusFilter[] = ['ALL', 'PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
 
   const fetchOrders = async () => {
     try {
@@ -48,6 +54,14 @@ export default function OrdersScreen() {
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  useEffect(() => {
+    if (selectedFilter === 'ALL') {
+      setFilteredOrders(orders);
+    } else {
+      setFilteredOrders(orders.filter(order => order.status === selectedFilter));
+    }
+  }, [selectedFilter, orders]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -105,17 +119,48 @@ export default function OrdersScreen() {
 
   return (
     <View style={styles.container}>
+      {/* Status Filter Chips */}
+      <ScrollView 
+        horizontal 
+        showsHorizontalScrollIndicator={false} 
+        style={styles.filterContainer}
+        contentContainerStyle={styles.filterContent}
+      >
+        {statusFilters.map((status) => (
+          <TouchableOpacity
+            key={status}
+            onPress={() => setSelectedFilter(status)}
+            style={[
+              styles.filterChip,
+              selectedFilter === status && styles.filterChipActive
+            ]}
+          >
+            <Text style={[
+              styles.filterChipText,
+              selectedFilter === status && styles.filterChipTextActive
+            ]}>
+              {status}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+
       {error ? (
         <View style={styles.center}>
           <Text style={styles.errorText}>{error}</Text>
         </View>
-      ) : orders.length === 0 ? (
+      ) : filteredOrders.length === 0 ? (
         <View style={styles.center}>
-          <Text style={styles.emptyText}>You haven't placed any orders yet.</Text>
+          <Text style={styles.emptyText}>
+            {selectedFilter === 'ALL' 
+              ? "You haven't placed any orders yet."
+              : `No ${selectedFilter.toLowerCase()} orders found.`
+            }
+          </Text>
         </View>
       ) : (
         <FlatList
-          data={orders}
+          data={filteredOrders}
           keyExtractor={(item) => item.id}
           renderItem={renderOrderItem}
           contentContainerStyle={styles.listContainer}
@@ -138,6 +183,35 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+  },
+  filterContainer: {
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E2E8F0',
+    maxHeight: 60,
+  },
+  filterContent: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    gap: 8,
+  },
+  filterChip: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: '#F1F5F9',
+    marginRight: 8,
+  },
+  filterChipActive: {
+    backgroundColor: '#0F172A',
+  },
+  filterChipText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#64748B',
+  },
+  filterChipTextActive: {
+    color: 'white',
   },
   listContainer: {
     padding: 16,
