@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { authenticate, requireAdmin, requireApproved } from '../middleware/auth';
+import { authenticate, requireAdmin, requireApproved, AuthRequest } from '../middleware/auth';
 import { notifyAllRetailersNewProduct } from '../utils/notifications'; // Let's create a generic notification if needed or just use push
 
 const router = Router();
@@ -38,7 +38,7 @@ router.get('/history', authenticate, requireAdmin, async (req, res) => {
 });
 
 // Admin: Update Metal Price
-router.post('/', authenticate, requireAdmin, async (req, res) => {
+router.post('/', authenticate, requireAdmin, async (req: AuthRequest, res) => {
   try {
     const { pricePerKg, effectiveDate, notifyRetailers } = req.body;
     
