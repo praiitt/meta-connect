@@ -608,6 +608,65 @@ const Products = () => {
                 />
               </div>
 
+              {/* Dynamic Metal Pricing */}
+              <div className="border-t pt-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <input
+                    type="checkbox"
+                    id="useMetalPrice"
+                    checked={formData.useMetalPrice}
+                    onChange={(e) =>
+                      setFormData({ ...formData, useMetalPrice: e.target.checked })
+                    }
+                    className="w-4 h-4"
+                  />
+                  <label htmlFor="useMetalPrice" className="text-sm font-medium text-slate-700">
+                    Use Dynamic Metal Pricing
+                  </label>
+                </div>
+                
+                {formData.useMetalPrice && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-3">
+                    <p className="text-xs text-slate-600">
+                      Final Price = (Current Metal Price × Weight) + Markup Amount
+                    </p>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                          Weight (kg) *
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          required={formData.useMetalPrice}
+                          value={formData.weightKg || ''}
+                          onChange={(e) =>
+                            setFormData({ ...formData, weightKg: e.target.value })
+                          }
+                          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                          Markup Amount (₹) *
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          required={formData.useMetalPrice}
+                          value={formData.markupAmount || ''}
+                          onChange={(e) =>
+                            setFormData({ ...formData, markupAmount: e.target.value })
+                          }
+                          className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Product Image Upload */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-2">

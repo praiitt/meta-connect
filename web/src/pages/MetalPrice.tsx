@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { metalPriceApi, MetalPrice } from '../api/metalPrice';
+import { metalPriceApi } from '../api/metalPrice';
+import type { MetalPrice } from '../api/metalPrice';
 import { TrendingUp, Calendar, DollarSign, Bell, Download } from 'lucide-react';
 
 export default function MetalPricePage() {
