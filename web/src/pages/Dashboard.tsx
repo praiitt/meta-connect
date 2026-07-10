@@ -121,7 +121,7 @@ export default function Dashboard() {
                   tickFormatter={(val) => val >= 1000 ? `${val/1000}k` : val}
                 />
                 <RechartsTooltip 
-                  formatter={(value: number) => formatCurrency(value)}
+                  formatter={(value: any) => formatCurrency(Number(value))}
                   labelFormatter={(label) => new Date(label).toLocaleDateString()}
                 />
                 <Line type="monotone" dataKey="revenue" stroke="#4f46e5" strokeWidth={3} dot={false} />

@@ -10,6 +10,7 @@ export interface Product {
   weightKg?: number | null;
   inStock: boolean;
   imageUrl: string | null;
+  categoryId?: string | null;
 }
 
 export interface CartItem {

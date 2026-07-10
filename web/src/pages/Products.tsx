@@ -3,6 +3,11 @@ import { apiClient } from '../api/client';
 import { Package, Plus, Edit2, Trash2, Loader2, X, Search, Download } from 'lucide-react';
 import { exportToCSV } from '../utils/csvExport';
 
+interface Category {
+  id: string;
+  name: string;
+}
+
 interface Product {
   id: string;
   name: string;
@@ -16,12 +21,15 @@ interface Product {
   inStock: boolean;
   imageUrl: string | null;
   createdAt: string;
+  categoryId?: string | null;
+  category?: Category | null;
 }
 
 type StockFilter = 'all' | 'inStock' | 'outOfStock';
 
 const Products = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,12 +57,23 @@ const Products = () => {
     weightKg: '',
     imageUrl: '',
     inStock: true,
+    categoryId: '',
     notifyRetailers: false,
   });
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await apiClient.get('/categories');
+      setCategories(res.data);
+    } catch (err) {
+      console.error('Failed to fetch categories');
+    }
+  };
 
   const handleExport = () => {
     const formattedData = filteredProducts.map((product) => ({
@@ -123,6 +142,8 @@ const Products = () => {
         weightKg: product.weightKg?.toString() || '',
         imageUrl: product.imageUrl || '',
         inStock: product.inStock,
+        categoryId: product.categoryId || '',
+        notifyRetailers: false,
       });
       setImagePreview(product.imageUrl);
     } else {
@@ -138,6 +159,7 @@ const Products = () => {
         weightKg: '',
         imageUrl: '',
         inStock: true,
+        categoryId: '',
         notifyRetailers: false,
       });
       setImagePreview(null);
@@ -211,6 +233,7 @@ const Products = () => {
         weightKg: formData.weightKg ? parseFloat(formData.weightKg) : null,
         imageUrl: formData.imageUrl || null,
         inStock: formData.inStock,
+        categoryId: formData.categoryId || null,
         notifyRetailers: formData.notifyRetailers,
       };
 
@@ -285,8 +308,9 @@ const Products = () => {
           Add Product
         </button>
       </div>
+    </div>
 
-      {/* Search and Filter Bar */}
+    {/* Search and Filter Bar */}
       <div className="flex items-center gap-4 mb-6">
         {/* Search Input */}
         <div className="relative flex-1 max-w-md">
@@ -342,6 +366,7 @@ const Products = () => {
               <tr>
                 <th className="text-left py-3 px-4 font-semibold text-slate-700">Name</th>
                 <th className="text-left py-3 px-4 font-semibold text-slate-700">SKU</th>
+                <th className="text-left py-3 px-4 font-semibold text-slate-700">Category</th>
                 <th className="text-left py-3 px-4 font-semibold text-slate-700">Price</th>
                 <th className="text-left py-3 px-4 font-semibold text-slate-700">MOQ</th>
                 <th className="text-left py-3 px-4 font-semibold text-slate-700">Stock</th>
@@ -363,6 +388,13 @@ const Products = () => {
                     )}
                   </td>
                   <td className="py-3 px-4 text-slate-600">{product.sku || '—'}</td>
+                  <td className="py-3 px-4 text-slate-600">
+                    {product.category ? (
+                      <span className="inline-block px-2 py-1 text-xs font-medium bg-slate-100 text-slate-700 rounded">
+                        {product.category.name}
+                      </span>
+                    ) : '—'}
+                  </td>
                   <td className="py-3 px-4">
                     {product.isPricePerKg ? (
                       <div>
@@ -441,6 +473,23 @@ const Products = () => {
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900"
                 />
+              </div>
+
+              {/* Category */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Category
+                </label>
+                <select
+                  value={formData.categoryId}
+                  onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900"
+                >
+                  <option value="">None</option>
+                  {categories.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
               </div>
 
               {/* Description */}

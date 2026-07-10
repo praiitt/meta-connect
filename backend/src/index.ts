@@ -16,6 +16,7 @@ import userRoutes from './routes/users';
 import buildRoutes from './routes/builds';
 import uploadRoutes from './routes/upload';
 import analyticsRoutes from './routes/analytics';
+import categoryRoutes from './routes/categories';
 
 const app = express();
 const prisma = new PrismaClient();
@@ -30,6 +31,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/builds', buildRoutes);

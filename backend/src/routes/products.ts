@@ -9,7 +9,15 @@ const prisma = new PrismaClient();
 // Get all products (Public/Registered)
 router.get('/', authenticate, requireApproved, async (req, res) => {
   try {
-    const products = await prisma.product.findMany();
+    const { categoryId } = req.query;
+    const filter = categoryId ? { categoryId: String(categoryId) } : {};
+    
+    const products = await prisma.product.findMany({
+      where: filter,
+      include: {
+        category: true
+      }
+    });
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
@@ -19,7 +27,10 @@ router.get('/', authenticate, requireApproved, async (req, res) => {
 // Get single product
 router.get('/:id', authenticate, requireApproved, async (req, res) => {
   try {
-    const product = await prisma.product.findUnique({ where: { id: req.params.id } });
+    const product = await prisma.product.findUnique({ 
+      where: { id: req.params.id },
+      include: { category: true }
+    });
     if (!product) return res.status(404).json({ message: 'Product not found' });
     res.json(product);
   } catch (error) {
@@ -30,9 +41,9 @@ router.get('/:id', authenticate, requireApproved, async (req, res) => {
 // Admin: Create product
 router.post('/', authenticate, requireAdmin, async (req, res) => {
   try {
-    const { name, description, price, pricePerKg, isPricePerKg, moq, sku, inStock, imageUrl, weightKg, notifyRetailers } = req.body;
+    const { name, description, price, pricePerKg, isPricePerKg, moq, sku, inStock, imageUrl, weightKg, categoryId, notifyRetailers } = req.body;
     const product = await prisma.product.create({
-      data: { name, description, price, pricePerKg, isPricePerKg, moq, sku, inStock, imageUrl, weightKg },
+      data: { name, description, price, pricePerKg, isPricePerKg, moq, sku, inStock, imageUrl, weightKg, categoryId },
     });
 
     if (notifyRetailers) {

@@ -129,7 +129,7 @@ router.patch('/:id/status', authenticate, requireAdmin, async (req, res) => {
 });
 
 // User: Register Expo push token
-router.post('/register-push-token', authenticate, async (req, res) => {
+router.post('/register-push-token', authenticate, async (req: any, res: any) => {
   const { pushToken } = req.body;
   if (!req.user?.id) {
     return res.status(401).json({ message: 'Unauthorized' });

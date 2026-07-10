@@ -1,31 +1,42 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Image, Alert, TextInput } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Image, Alert, TextInput, ScrollView } from 'react-native';
 import apiClient from '../../api/client';
 import { useCartStore, Product } from '../../store/useCartStore';
 import { Ionicons } from '@expo/vector-icons';
 
+interface Category {
+  id: string;
+  name: string;
+}
+
 export default function CatalogScreen() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [showInStockOnly, setShowInStockOnly] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const addItem = useCartStore((state) => state.addItem);
 
   useEffect(() => {
-    fetchProducts();
+    fetchData();
   }, []);
 
   useEffect(() => {
     applyFilters();
-  }, [searchQuery, showInStockOnly, products]);
+  }, [searchQuery, showInStockOnly, selectedCategory, products]);
 
-  const fetchProducts = async () => {
+  const fetchData = async () => {
     try {
-      const response = await apiClient.get('/products');
-      setProducts(response.data);
+      const [productsRes, categoriesRes] = await Promise.all([
+        apiClient.get('/products'),
+        apiClient.get('/categories')
+      ]);
+      setProducts(productsRes.data);
+      setCategories(categoriesRes.data);
     } catch (error) {
-      console.error('Failed to fetch products', error);
+      console.error('Failed to fetch data', error);
       Alert.alert('Error', 'Could not load product catalog.');
     } finally {
       setLoading(false);
@@ -34,6 +45,10 @@ export default function CatalogScreen() {
 
   const applyFilters = () => {
     let filtered = products;
+
+    if (selectedCategory) {
+      filtered = filtered.filter(p => p.categoryId === selectedCategory);
+    }
 
     // Search filter (by name or SKU)
     if (searchQuery.trim()) {
@@ -111,6 +126,33 @@ export default function CatalogScreen() {
         )}
       </View>
 
+      {/* Category Chips */}
+      {categories.length > 0 && (
+        <View style={styles.categoriesContainer}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoriesList}>
+            <TouchableOpacity
+              style={[styles.categoryChip, !selectedCategory && styles.categoryChipActive]}
+              onPress={() => setSelectedCategory(null)}
+            >
+              <Text style={[styles.categoryChipText, !selectedCategory && styles.categoryChipTextActive]}>
+                All
+              </Text>
+            </TouchableOpacity>
+            {categories.map((cat) => (
+              <TouchableOpacity
+                key={cat.id}
+                style={[styles.categoryChip, selectedCategory === cat.id && styles.categoryChipActive]}
+                onPress={() => setSelectedCategory(cat.id)}
+              >
+                <Text style={[styles.categoryChipText, selectedCategory === cat.id && styles.categoryChipTextActive]}>
+                  {cat.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      )}
+
       {/* In Stock Toggle */}
       <View style={styles.filterRow}>
         <TouchableOpacity 
@@ -175,6 +217,31 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     fontSize: 16,
     color: '#0F172A',
+  },
+  categoriesContainer: {
+    marginBottom: 8,
+  },
+  categoriesList: {
+    paddingHorizontal: 16,
+    gap: 8,
+  },
+  categoryChip: {
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    borderRadius: 20,
+    backgroundColor: '#E2E8F0',
+    marginRight: 8,
+  },
+  categoryChipActive: {
+    backgroundColor: '#0066cc',
+  },
+  categoryChipText: {
+    fontSize: 14,
+    color: '#475569',
+    fontWeight: '500',
+  },
+  categoryChipTextActive: {
+    color: 'white',
   },
   filterRow: {
     flexDirection: 'row',

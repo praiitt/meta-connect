@@ -130,3 +130,15 @@ export function exportUsersToCSV(users: User[]) {
   
   downloadCSV(csv, filename);
 }
+
+/**
+ * Generic export data to CSV
+ */
+export function exportToCSV(filename: string, data: any[]) {
+  if (!data || data.length === 0) {
+    alert('No data to export');
+    return;
+  }
+  const csv = Papa.unparse(data);
+  downloadCSV(csv, filename);
+}
