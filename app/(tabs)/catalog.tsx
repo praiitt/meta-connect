@@ -9,9 +9,15 @@ interface Category {
   name: string;
 }
 
+interface MetalPrice {
+  pricePerKg: number;
+  effectiveDate: string;
+}
+
 export default function CatalogScreen() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [metalPrice, setMetalPrice] = useState<MetalPrice | null>(null);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -29,12 +35,14 @@ export default function CatalogScreen() {
 
   const fetchData = async () => {
     try {
-      const [productsRes, categoriesRes] = await Promise.all([
+      const [productsRes, categoriesRes, metalPriceRes] = await Promise.all([
         apiClient.get('/products'),
-        apiClient.get('/categories')
+        apiClient.get('/categories'),
+        apiClient.get('/metal-price/current').catch(() => ({ data: null }))
       ]);
       setProducts(productsRes.data);
       setCategories(categoriesRes.data);
+      setMetalPrice(metalPriceRes.data);
     } catch (error) {
       console.error('Failed to fetch data', error);
       Alert.alert('Error', 'Could not load product catalog.');
@@ -109,6 +117,16 @@ export default function CatalogScreen() {
 
   return (
     <View style={styles.container}>
+      {/* Metal Price Banner */}
+      {metalPrice && (
+        <View style={styles.metalPriceBanner}>
+          <Ionicons name="trending-up" size={20} color="#10B981" />
+          <Text style={styles.metalPriceText}>
+            Today's Metal Price: <Text style={styles.metalPriceValue}>₹{metalPrice.pricePerKg.toLocaleString('en-IN')}/kg</Text>
+          </Text>
+        </View>
+      )}
+
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <Ionicons name="search" size={20} color="#64748B" style={styles.searchIcon} />
@@ -197,6 +215,29 @@ export default function CatalogScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5' },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  metalPriceBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ECFDF5',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    marginHorizontal: 16,
+    marginTop: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#10B981',
+    gap: 8,
+  },
+  metalPriceText: {
+    fontSize: 14,
+    color: '#065F46',
+    fontWeight: '500',
+  },
+  metalPriceValue: {
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -18,6 +18,10 @@ interface Product {
   moq: number;
   sku: string | null;
   weightKg: number | null;
+  useMetalPrice?: boolean;
+  markupAmount?: number | null;
+  calculatedPrice?: number;
+  currentMetalPrice?: number;
   inStock: boolean;
   imageUrl: string | null;
   createdAt: string;
@@ -55,6 +59,8 @@ const Products = () => {
     moq: '10',
     sku: '',
     weightKg: '',
+    useMetalPrice: false,
+    markupAmount: '',
     imageUrl: '',
     inStock: true,
     categoryId: '',
@@ -140,6 +146,8 @@ const Products = () => {
         moq: product.moq.toString(),
         sku: product.sku || '',
         weightKg: product.weightKg?.toString() || '',
+        useMetalPrice: product.useMetalPrice || false,
+        markupAmount: product.markupAmount?.toString() || '',
         imageUrl: product.imageUrl || '',
         inStock: product.inStock,
         categoryId: product.categoryId || '',
@@ -157,6 +165,8 @@ const Products = () => {
         moq: '10',
         sku: '',
         weightKg: '',
+    useMetalPrice: false,
+    markupAmount: '',
         imageUrl: '',
         inStock: true,
         categoryId: '',
@@ -231,6 +241,8 @@ const Products = () => {
         moq: parseInt(formData.moq, 10),
         sku: formData.sku || null,
         weightKg: formData.weightKg ? parseFloat(formData.weightKg) : null,
+        useMetalPrice: formData.useMetalPrice,
+        markupAmount: formData.markupAmount ? parseFloat(formData.markupAmount) : null,
         imageUrl: formData.imageUrl || null,
         inStock: formData.inStock,
         categoryId: formData.categoryId || null,

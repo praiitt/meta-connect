@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AdminLayout from './layouts/AdminLayout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import MetalPrice from './pages/MetalPrice';
 import Users from './pages/Users';
 import Products from './pages/Products';
 import Categories from './pages/Categories';
@@ -16,6 +17,7 @@ function App() {
         
         <Route element={<AdminLayout />}>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/metal-price" element={<MetalPrice />} />
           <Route path="/users" element={<Users />} />
           <Route path="/products" element={<Products />} />
           <Route path="/categories" element={<Categories />} />
