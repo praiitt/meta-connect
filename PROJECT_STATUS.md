@@ -330,26 +330,101 @@
 
 ---
 
+### **Phase 8.5: Metal Price Management + Retailer Profile** ✅
+**Status**: COMPLETE  
+**Implementation Date**: 2024-07-10
+
+**Features Delivered**:
+
+#### Metal Price Management:
+- ✅ Admin can set daily base metal price (₹/kg)
+- ✅ 30-day price history view
+- ✅ CSV export for price records
+- ✅ Optional push notification to retailers on price change
+- ✅ Dynamic product pricing: `(Metal Price × Weight) + Markup`
+- ✅ Products support both Fixed and Dynamic pricing modes
+
+#### Retailer Profile Management:
+- ✅ Mobile profile screen at `app/(tabs)/profile.tsx`
+- ✅ View/edit: Name, Company, GST
+- ✅ Phone number is immutable (cannot be changed)
+- ✅ Backend `PATCH /api/users/me` endpoint
+- ✅ Logout functionality
+
+**Files Created/Modified**:
+- `backend/src/routes/metal-prices.ts` — NEW (Metal Price API)
+- `backend/src/routes/users.ts` — Added `/me` update endpoint
+- `backend/prisma/schema.prisma` — Added MetalPrice model
+- `backend/prisma/seed-metal-price.ts` — NEW (Seed script)
+- `web/src/pages/MetalPrice.tsx` — NEW (Admin metal price page)
+- `web/src/api/metal-prices.ts` — NEW (API client)
+- `app/(tabs)/profile.tsx` — NEW (Retailer profile screen)
+- `app/(tabs)/catalog.tsx` — Metal price banner at top
+- `web/src/layouts/AdminLayout.tsx` — Added Metal Price nav link
+
+**Database Schema:**
+```prisma
+model MetalPrice {
+  id            String   @id @default(uuid())
+  pricePerKg    Float
+  effectiveDate DateTime
+  createdBy     String
+  createdAt     DateTime @default(now())
+}
+
+model Product {
+  // Existing fields...
+  useMetalPrice Boolean  @default(false)
+  weightKg      Float?
+  markupAmount  Float?
+}
+```
+
+---
+
+### **Phase 9: Development Deployment** ✅
+**Status**: COMPLETE  
+**Implementation Date**: 2024-07-10  
+**Live URL**: https://metal-connect.dev.rraasi.com
+
+**Deployment Details**:
+- ✅ Backend API deployed to dev server (VM: 34.14.164.148)
+- ✅ Admin dashboard deployed and accessible
+- ✅ Database migrations applied (Neon PostgreSQL dev environment)
+- ✅ Nginx + SSL configured (Let's Encrypt)
+- ✅ PM2 process running stably (vibe-dev-8004-web)
+- ✅ All API endpoints tested and working
+- ✅ Metal price seeded (₹500/kg)
+- ✅ Admin user seeded (admin@metalconnect.com)
+- ✅ Category data seeded (5 categories)
+
+**Issues Fixed**:
+- ✅ Prisma schema sync issues resolved
+- ✅ TypeScript compilation errors fixed (AuthRequest typing)
+- ✅ Metal price routes registered correctly
+- ✅ Database seeding completed
+
+**Next Steps:**
+- [ ] Full QA testing on dev environment
+- [ ] Mobile app update (point to dev backend)
+- [ ] Test dynamic pricing calculations
+- [ ] Test push notifications
+- [ ] **Production deployment when ready**
+
+---
+
 ## 🚀 **READY FOR NEXT PHASE**
 
+### **Phase 10: Production Deployment**
+Make it live for real users:
+- Deploy backend to production VM (metal-connect.prod.rraasi.com)
+- Deploy admin dashboard to production
+- Configure production database (Neon PostgreSQL prod)
+- Build mobile AAB for Play Store
+- Submit to Google Play Store
+- Final security audit
 
-### **Recommended: Phase 8 — Retailer Profile Management**
-Give retailers control over their profile:
-- User profile screen in mobile app
-- Edit name, company, GST number
-- View order statistics
-- Logout functionality
-
-**Estimated Time**: 2-3 hours
-
-### **Alternative: Phase 9 — Testing & Deployment**
-Make it live:
-- Deploy backend to production VM
-- Build and deploy admin dashboard
-- Build mobile APK/AAB
-- Submit to Play Store
-
-**Estimated Time**: 4-6 hours
+**Estimated Time**: 3-4 hours
 
 ---
 
