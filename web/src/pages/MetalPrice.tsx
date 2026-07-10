@@ -1,38 +1,56 @@
 import { useState, useEffect } from 'react';
-import { metalPriceApi } from '../api/metalPrice';
+import { metalPriceApi, MetalType } from '../api/metalPrice';
 import type { MetalPrice } from '../api/metalPrice';
-import { TrendingUp, Calendar, DollarSign, Bell, Download } from 'lucide-react';
+import { TrendingUp, Calendar, Bell, Download } from 'lucide-react';
+
+const METAL_COLORS: Record<string, string> = {
+  STEEL: 'from-gray-500 to-gray-700',
+  ALUMINIUM: 'from-slate-400 to-slate-500',
+  BRASS: 'from-yellow-500 to-yellow-600',
+  COPPER: 'from-orange-500 to-orange-700',
+  BRONZE: 'from-amber-600 to-amber-800',
+  IRON: 'from-zinc-700 to-zinc-900',
+};
+
+const METAL_TYPES = ["STEEL", "ALUMINIUM", "BRASS", "COPPER", "BRONZE", "IRON"];
 
 export default function MetalPricePage() {
-  const [currentPrice, setCurrentPrice] = useState<MetalPrice | null>(null);
+  const [currentPrices, setCurrentPrices] = useState<MetalPrice[]>([]);
   const [history, setHistory] = useState<MetalPrice[]>([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   
+  const [selectedMetalType, setSelectedMetalType] = useState<string>("STEEL");
   const [newPrice, setNewPrice] = useState('');
   const [effectiveDate, setEffectiveDate] = useState(new Date().toISOString().split('T')[0]);
   const [notifyRetailers, setNotifyRetailers] = useState(true);
+  const [filterType, setFilterType] = useState<string>("ALL");
 
   useEffect(() => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    // When selected metal type changes, update the newPrice input to its current price
+    const currentPriceObj = currentPrices.find(p => p.metalType === selectedMetalType);
+    if (currentPriceObj) {
+      setNewPrice(currentPriceObj.pricePerKg.toString());
+    } else {
+      setNewPrice('');
+    }
+  }, [selectedMetalType, currentPrices]);
+
   const fetchData = async () => {
     try {
       setLoading(true);
       const [currentRes, historyRes] = await Promise.all([
-        metalPriceApi.getCurrent(),
-        metalPriceApi.getHistory(30)
+        metalPriceApi.getCurrentAll(),
+        metalPriceApi.getHistoryAll(100)
       ]);
-      setCurrentPrice(currentRes.data);
+      setCurrentPrices(currentRes.data);
       setHistory(historyRes.data);
-      setNewPrice(currentRes.data.pricePerKg.toString());
     } catch (error: any) {
       console.error('Error fetching metal price data:', error);
-      if (error.response?.status === 404) {
-        // No price set yet
-        setCurrentPrice(null);
-      }
     } finally {
       setLoading(false);
     }
@@ -48,6 +66,7 @@ export default function MetalPricePage() {
     try {
       setUpdating(true);
       await metalPriceApi.updatePrice({
+        metalType: selectedMetalType,
         pricePerKg: parseFloat(newPrice),
         effectiveDate,
         notifyRetailers
@@ -64,9 +83,14 @@ export default function MetalPricePage() {
   };
 
   const exportToCSV = () => {
-    const headers = ['Date', 'Price per Kg (₹)'];
-    const rows = history.map(h => [
+    const headers = ['Date', 'Metal Type', 'Price per Kg (₹)'];
+    const filteredHistory = filterType === 'ALL' 
+      ? history 
+      : history.filter(h => h.metalType === filterType);
+
+    const rows = filteredHistory.map(h => [
       new Date(h.effectiveDate).toLocaleDateString('en-IN'),
+      h.metalType,
       h.pricePerKg.toString()
     ]);
     
@@ -87,6 +111,10 @@ export default function MetalPricePage() {
     );
   }
 
+  const filteredHistory = filterType === 'ALL' 
+    ? history 
+    : history.filter(h => h.metalType === filterType);
+
   return (
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header */}
@@ -96,56 +124,49 @@ export default function MetalPricePage() {
           Metal Price Management
         </h1>
         <p className="text-gray-600 mt-2">
-          Update daily metal prices and view historical trends
+          Update daily metal prices and view historical trends for multiple metals
         </p>
       </div>
 
-      {/* Current Price Card */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-blue-100 text-sm font-medium">Current Price</span>
-            <DollarSign size={24} />
-          </div>
-          <div className="text-4xl font-bold mb-1">
-            ₹{currentPrice?.pricePerKg.toLocaleString('en-IN') || '---'}
-          </div>
-          <div className="text-blue-100 text-sm">per kilogram</div>
-          {currentPrice && (
-            <div className="mt-3 pt-3 border-t border-blue-400 text-xs text-blue-100">
-              Last updated: {new Date(currentPrice.effectiveDate).toLocaleDateString('en-IN')}
+      {/* Current Prices Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+        {METAL_TYPES.map(type => {
+          const currentData = currentPrices.find(p => p.metalType === type);
+          return (
+            <div key={type} className={`bg-gradient-to-br ${METAL_COLORS[type] || 'from-blue-500 to-blue-600'} rounded-xl p-4 text-white shadow-lg`}>
+              <div className="text-sm font-medium opacity-80">{type}</div>
+              <div className="text-2xl font-bold mt-1">
+                ₹{currentData?.pricePerKg.toLocaleString('en-IN') || '---'}
+              </div>
+              <div className="text-xs opacity-70 mt-2">
+                {currentData 
+                  ? new Date(currentData.effectiveDate).toLocaleDateString('en-IN')
+                  : 'No data'}
+              </div>
             </div>
-          )}
-        </div>
-
-        <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-600 text-sm font-medium">30-Day Average</span>
-            <Calendar size={20} className="text-gray-400" />
-          </div>
-          <div className="text-3xl font-bold text-gray-900">
-            ₹{history.length > 0 
-              ? (history.reduce((sum, h) => sum + h.pricePerKg, 0) / history.length).toFixed(2)
-              : '---'}
-          </div>
-          <div className="text-gray-500 text-sm mt-1">Last 30 days</div>
-        </div>
-
-        <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-600 text-sm font-medium">Price Changes</span>
-            <TrendingUp size={20} className="text-gray-400" />
-          </div>
-          <div className="text-3xl font-bold text-gray-900">{history.length}</div>
-          <div className="text-gray-500 text-sm mt-1">Total updates</div>
-        </div>
+          );
+        })}
       </div>
 
       {/* Update Price Form */}
       <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6 mb-8">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Update Metal Price</h2>
         <form onSubmit={handleUpdatePrice} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Metal Type
+              </label>
+              <select
+                value={selectedMetalType}
+                onChange={(e) => setSelectedMetalType(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                {METAL_TYPES.map(type => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
+              </select>
+            </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Price per Kg (₹)
@@ -201,8 +222,20 @@ export default function MetalPricePage() {
       {/* Price History */}
       <div className="bg-white rounded-xl shadow-md border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-900">Price History (Last 30 Days)</h2>
-          {history.length > 0 && (
+          <div className="flex items-center gap-4">
+            <h2 className="text-xl font-bold text-gray-900">Price History</h2>
+            <select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+              className="text-sm px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="ALL">All Metals</option>
+              {METAL_TYPES.map(type => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </div>
+          {filteredHistory.length > 0 && (
             <button
               onClick={exportToCSV}
               className="flex items-center gap-2 px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
@@ -213,10 +246,10 @@ export default function MetalPricePage() {
           )}
         </div>
 
-        {history.length === 0 ? (
+        {filteredHistory.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             <Calendar size={48} className="mx-auto mb-4 opacity-50" />
-            <p>No price history available yet</p>
+            <p>No price history available</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -224,44 +257,30 @@ export default function MetalPricePage() {
               <thead>
                 <tr className="border-b border-gray-200">
                   <th className="text-left py-3 px-4 font-semibold text-gray-700">Date</th>
+                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Metal Type</th>
                   <th className="text-right py-3 px-4 font-semibold text-gray-700">Price (₹/kg)</th>
-                  <th className="text-right py-3 px-4 font-semibold text-gray-700">Change</th>
                 </tr>
               </thead>
               <tbody>
-                {history.map((price, index) => {
-                  const previousPrice = history[index + 1];
-                  const change = previousPrice 
-                    ? ((price.pricePerKg - previousPrice.pricePerKg) / previousPrice.pricePerKg) * 100
-                    : 0;
-                  
-                  return (
-                    <tr key={price.id} className="border-b border-gray-100 hover:bg-gray-50">
-                      <td className="py-3 px-4 text-gray-900">
-                        {new Date(price.effectiveDate).toLocaleDateString('en-IN', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric'
-                        })}
-                      </td>
-                      <td className="py-3 px-4 text-right font-semibold text-gray-900">
-                        ₹{price.pricePerKg.toLocaleString('en-IN')}
-                      </td>
-                      <td className="py-3 px-4 text-right">
-                        {previousPrice ? (
-                          <span className={`inline-flex items-center gap-1 ${
-                            change > 0 ? 'text-green-600' : change < 0 ? 'text-red-600' : 'text-gray-600'
-                          }`}>
-                            {change > 0 ? '↑' : change < 0 ? '↓' : '→'}
-                            {Math.abs(change).toFixed(2)}%
-                          </span>
-                        ) : (
-                          <span className="text-gray-400">—</span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
+                {filteredHistory.map((price) => (
+                  <tr key={price.id} className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="py-3 px-4 text-gray-900">
+                      {new Date(price.effectiveDate).toLocaleDateString('en-IN', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
+                    </td>
+                    <td className="py-3 px-4 text-gray-900">
+                      <span className="inline-block px-2 py-1 text-xs font-semibold rounded bg-gray-100 text-gray-700">
+                        {price.metalType}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-right font-semibold text-gray-900">
+                      ₹{price.pricePerKg.toLocaleString('en-IN')}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

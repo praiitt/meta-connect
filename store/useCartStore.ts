@@ -8,6 +8,8 @@ export interface Product {
   moq: number;
   sku: string | null;
   weightKg?: number | null;
+  metalType?: string | null;
+  useMetalPrice?: boolean;
   inStock: boolean;
   imageUrl: string | null;
   categoryId?: string | null;

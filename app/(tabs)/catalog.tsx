@@ -10,14 +10,24 @@ interface Category {
 }
 
 interface MetalPrice {
+  metalType: string;
   pricePerKg: number;
   effectiveDate: string;
 }
 
+const METAL_COLORS: Record<string, { bg: string, text: string }> = {
+  STEEL: { bg: '#F1F5F9', text: '#475569' },
+  ALUMINIUM: { bg: '#F8FAFC', text: '#64748B' },
+  BRASS: { bg: '#FEF3C7', text: '#D97706' },
+  COPPER: { bg: '#FFEDD5', text: '#C2410C' },
+  BRONZE: { bg: '#FEF3C7', text: '#B45309' },
+  IRON: { bg: '#F1F5F9', text: '#334155' },
+};
+
 export default function CatalogScreen() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [metalPrice, setMetalPrice] = useState<MetalPrice | null>(null);
+  const [metalPrices, setMetalPrices] = useState<MetalPrice[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,14 +45,14 @@ export default function CatalogScreen() {
 
   const fetchData = async () => {
     try {
-      const [productsRes, categoriesRes, metalPriceRes] = await Promise.all([
+      const [productsRes, categoriesRes, metalPricesRes] = await Promise.all([
         apiClient.get('/products'),
         apiClient.get('/categories'),
-        apiClient.get('/metal-price/current').catch(() => ({ data: null }))
+        apiClient.get('/metal-price/current').catch(() => ({ data: [] }))
       ]);
       setProducts(productsRes.data);
       setCategories(categoriesRes.data);
-      setMetalPrice(metalPriceRes.data);
+      setMetalPrices(Array.isArray(metalPricesRes.data) ? metalPricesRes.data : []);
     } catch (error) {
       console.error('Failed to fetch data', error);
       Alert.alert('Error', 'Could not load product catalog.');
@@ -58,7 +68,6 @@ export default function CatalogScreen() {
       filtered = filtered.filter(p => p.categoryId === selectedCategory);
     }
 
-    // Search filter (by name or SKU)
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(p => 
@@ -67,7 +76,6 @@ export default function CatalogScreen() {
       );
     }
 
-    // In Stock filter
     if (showInStockOnly) {
       filtered = filtered.filter(p => p.inStock);
     }
@@ -93,6 +101,13 @@ export default function CatalogScreen() {
         <Text style={styles.name}>{item.name}</Text>
         {item.sku && <Text style={styles.sku}>SKU: {item.sku}</Text>}
         {item.weightKg != null && <Text style={styles.sku}>Weight: {item.weightKg} kg</Text>}
+        {item.useMetalPrice && item.metalType && (
+          <View style={[styles.metalBadge, { backgroundColor: METAL_COLORS[item.metalType]?.bg || '#f0f0f0' }]}>
+            <Text style={[styles.metalBadgeText, { color: METAL_COLORS[item.metalType]?.text || '#666' }]}>
+              {item.metalType}
+            </Text>
+          </View>
+        )}
         <Text style={styles.price}>${item.price.toFixed(2)}</Text>
         <Text style={styles.moq}>Minimum Order: {item.moq}</Text>
         
@@ -117,13 +132,20 @@ export default function CatalogScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Metal Price Banner */}
-      {metalPrice && (
-        <View style={styles.metalPriceBanner}>
-          <Ionicons name="trending-up" size={20} color="#10B981" />
-          <Text style={styles.metalPriceText}>
-            Today's Metal Price: <Text style={styles.metalPriceValue}>₹{metalPrice.pricePerKg.toLocaleString('en-IN')}/kg</Text>
-          </Text>
+      {/* Metal Prices Banner */}
+      {metalPrices.length > 0 && (
+        <View style={styles.bannerContainer}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.bannerScroll}>
+            {metalPrices.map((mp, index) => (
+              <View key={index} style={[styles.metalPriceCard, { borderColor: METAL_COLORS[mp.metalType]?.text || '#ccc' }]}>
+                <Ionicons name="trending-up" size={14} color={METAL_COLORS[mp.metalType]?.text || '#666'} />
+                <Text style={[styles.metalPriceType, { color: METAL_COLORS[mp.metalType]?.text || '#666' }]}>
+                  {mp.metalType}:
+                </Text>
+                <Text style={styles.metalPriceValue}>₹{mp.pricePerKg.toLocaleString('en-IN')}</Text>
+              </View>
+            ))}
+          </ScrollView>
         </View>
       )}
 
@@ -215,35 +237,40 @@ export default function CatalogScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5' },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  metalPriceBanner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#ECFDF5',
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    marginHorizontal: 16,
+  bannerContainer: {
     marginTop: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#10B981',
+    marginBottom: 4,
+  },
+  bannerScroll: {
+    paddingHorizontal: 16,
     gap: 8,
   },
-  metalPriceText: {
-    fontSize: 14,
-    color: '#065F46',
-    fontWeight: '500',
+  metalPriceCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    gap: 4,
+    marginRight: 8,
+  },
+  metalPriceType: {
+    fontSize: 12,
+    fontWeight: '600',
   },
   metalPriceValue: {
+    fontSize: 13,
     fontWeight: 'bold',
-    fontSize: 15,
+    color: '#0F172A',
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
     marginHorizontal: 16,
-    marginTop: 12,
+    marginTop: 8,
     marginBottom: 8,
     paddingHorizontal: 12,
     borderRadius: 10,
@@ -346,6 +373,17 @@ const styles = StyleSheet.create({
   },
   name: { fontSize: 16, fontWeight: 'bold', marginBottom: 4 },
   sku: { fontSize: 12, color: '#666', marginBottom: 4 },
+  metalBadge: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    marginBottom: 4,
+  },
+  metalBadgeText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
   price: { fontSize: 18, color: '#0066cc', fontWeight: 'bold', marginBottom: 4 },
   moq: { fontSize: 12, color: '#d9534f', fontWeight: 'bold', marginBottom: 8 },
   addButton: {

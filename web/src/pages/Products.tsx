@@ -19,6 +19,7 @@ interface Product {
   sku: string | null;
   weightKg: number | null;
   useMetalPrice?: boolean;
+  metalType?: string | null;
   markupAmount?: number | null;
   calculatedPrice?: number;
   currentMetalPrice?: number;
@@ -59,7 +60,7 @@ const Products = () => {
     moq: '10',
     sku: '',
     weightKg: '',
-    useMetalPrice: false,
+    useMetalPrice: false, metalType: "",
     markupAmount: '',
     imageUrl: '',
     inStock: true,
@@ -147,6 +148,7 @@ const Products = () => {
         sku: product.sku || '',
         weightKg: product.weightKg?.toString() || '',
         useMetalPrice: product.useMetalPrice || false,
+        metalType: product.metalType || '',
         markupAmount: product.markupAmount?.toString() || '',
         imageUrl: product.imageUrl || '',
         inStock: product.inStock,
@@ -165,7 +167,7 @@ const Products = () => {
         moq: '10',
         sku: '',
         weightKg: '',
-    useMetalPrice: false,
+    useMetalPrice: false, metalType: "",
     markupAmount: '',
         imageUrl: '',
         inStock: true,
@@ -242,6 +244,7 @@ const Products = () => {
         sku: formData.sku || null,
         weightKg: formData.weightKg ? parseFloat(formData.weightKg) : null,
         useMetalPrice: formData.useMetalPrice,
+        metalType: formData.metalType || null,
         markupAmount: formData.markupAmount ? parseFloat(formData.markupAmount) : null,
         imageUrl: formData.imageUrl || null,
         inStock: formData.inStock,
@@ -631,6 +634,23 @@ const Products = () => {
                       Final Price = (Current Metal Price × Weight) + Markup Amount
                     </p>
                     
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">
+                        Metal Type *
+                      </label>
+                      <select
+                        required={formData.useMetalPrice}
+                        value={formData.metalType}
+                        onChange={(e) => setFormData({ ...formData, metalType: e.target.value })}
+                        className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">Select Metal Type</option>
+                        {["STEEL", "ALUMINIUM", "BRASS", "COPPER", "BRONZE", "IRON"].map(type => (
+                          <option key={type} value={type}>{type}</option>
+                        ))}
+                      </select>
+                    </div>
+
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">

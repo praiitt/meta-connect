@@ -47,6 +47,7 @@ model Product {
   weightKg     Float?
   markupAmount Float?
   useMetalPrice Boolean    @default(false)
+  metalType    String?     // "STEEL", "ALUMINIUM", "BRASS", "COPPER", "BRONZE", "IRON"
   categoryId   String?
   category     Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   createdAt    DateTime    @default(now())
@@ -55,13 +56,15 @@ model Product {
 }
 
 model MetalPrice {
-  id          String   @id @default(uuid())
-  pricePerKg  Float
+  id            String   @id @default(uuid())
+  metalType     String   @default("STEEL") // "STEEL", "ALUMINIUM", "BRASS", "COPPER", "BRONZE", "IRON"
+  pricePerKg    Float
   effectiveDate DateTime @default(now())
-  createdBy   String?
-  createdAt   DateTime @default(now())
+  createdBy     String?
+  createdAt     DateTime @default(now())
   
   @@map("metal_prices")
+  @@index([metalType, effectiveDate])
 }
 
 model Order {

@@ -8,8 +8,9 @@ const prisma = new PrismaClient();
 
 // Helper to attach calculated dynamic price if needed
 async function applyDynamicPricing(product: any) {
-  if (product.useMetalPrice && product.weightKg) {
+  if (product.useMetalPrice && product.weightKg && product.metalType) {
     const currentPrice = await prisma.metalPrice.findFirst({
+      where: { metalType: product.metalType },
       orderBy: { effectiveDate: 'desc' },
     });
     if (currentPrice) {
@@ -70,7 +71,7 @@ router.post('/', authenticate, requireAdmin, async (req, res) => {
     const { 
       name, description, price, pricePerKg, isPricePerKg, 
       moq, sku, inStock, imageUrl, weightKg, categoryId, notifyRetailers,
-      useMetalPrice, markupAmount
+      useMetalPrice, markupAmount, metalType
     } = req.body;
     
     const product = await prisma.product.create({
@@ -78,7 +79,8 @@ router.post('/', authenticate, requireAdmin, async (req, res) => {
         name, description, price: price || 0, pricePerKg, isPricePerKg, 
         moq, sku, inStock, imageUrl, weightKg, categoryId,
         useMetalPrice: useMetalPrice || false,
-        markupAmount: markupAmount || null
+        markupAmount: markupAmount || null,
+        metalType: metalType || null
       },
     });
 
