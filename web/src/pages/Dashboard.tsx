@@ -15,7 +15,7 @@ export default function Dashboard() {
       try {
         const [overviewRes, trendRes, productsRes] = await Promise.all([
           fetchOverview(),
-          fetchRevenueTrend(30),
+          fetchRevenueTrend(7),
           fetchTopProducts()
         ]);
         setStats(overviewRes.data);
@@ -104,7 +104,7 @@ export default function Dashboard() {
         <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm lg:col-span-2">
           <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
             <TrendingUp size={20} className="text-indigo-600" />
-            Revenue Trend (Last 30 Days)
+            Revenue Trend (Last 7 Days)
           </h3>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">

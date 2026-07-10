@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Plus, Edit2, Trash2, Loader2, Package } from 'lucide-react';
-import { fetchCategories, createCategory, updateCategory, deleteCategory, Category } from '../api/categories';
+import { fetchCategories, createCategory, updateCategory, deleteCategory, type Category } from '../api/categories';
 
 export default function Categories() {
   const [categories, setCategories] = useState<Category[]>([]);
