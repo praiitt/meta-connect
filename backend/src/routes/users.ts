@@ -128,6 +128,41 @@ router.patch('/:id/status', authenticate, requireAdmin, async (req, res) => {
   }
 });
 
+// User: Update own profile (authenticated users only)
+router.patch('/me', authenticate, async (req: any, res: any) => {
+  const { name, company, gst } = req.body;
+  
+  if (!req.user?.id) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: req.user.id },
+      data: {
+        ...(name && { name }),
+        ...(company && { company }),
+        ...(gst !== undefined && { gst }), // Allow empty string to clear GST
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        phone: true,
+        company: true,
+        gst: true,
+        status: true,
+        role: true,
+      }
+    });
+
+    res.json({ message: 'Profile updated successfully', user: updatedUser });
+  } catch (error) {
+    console.error('Profile update error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // User: Register Expo push token
 router.post('/register-push-token', authenticate, async (req: any, res: any) => {
   const { pushToken } = req.body;
