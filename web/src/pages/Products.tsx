@@ -382,6 +382,7 @@ const Products = () => {
                 <th className="text-left py-3 px-4 font-semibold text-slate-700">Name</th>
                 <th className="text-left py-3 px-4 font-semibold text-slate-700">SKU</th>
                 <th className="text-left py-3 px-4 font-semibold text-slate-700">Category</th>
+                <th className="text-left py-3 px-4 font-semibold text-slate-700">Metal Type</th>
                 <th className="text-left py-3 px-4 font-semibold text-slate-700">Price</th>
                 <th className="text-left py-3 px-4 font-semibold text-slate-700">MOQ</th>
                 <th className="text-left py-3 px-4 font-semibold text-slate-700">Stock</th>
@@ -407,6 +408,13 @@ const Products = () => {
                     {product.category ? (
                       <span className="inline-block px-2 py-1 text-xs font-medium bg-slate-100 text-slate-700 rounded">
                         {product.category.name}
+                      </span>
+                    ) : '—'}
+                  </td>
+                  <td className="py-3 px-4 text-slate-600">
+                    {product.useMetalPrice && product.metalType ? (
+                      <span className="inline-block px-2 py-1 text-xs font-semibold bg-blue-100 text-blue-700 rounded">
+                        {product.metalType}
                       </span>
                     ) : '—'}
                   </td>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { metalPriceApi, MetalType } from '../api/metalPrice';
-import type { MetalPrice } from '../api/metalPrice';
+import { metalPriceApi } from '../api/metalPrice';
+import type { MetalPrice, MetalType } from '../api/metalPrice';
 import { TrendingUp, Calendar, Bell, Download } from 'lucide-react';
 
 const METAL_COLORS: Record<string, string> = {
