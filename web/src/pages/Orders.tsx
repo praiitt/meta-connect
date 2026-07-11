@@ -346,7 +346,7 @@ export default function Orders() {
                         Order Total
                       </td>
                       <td className="px-4 py-3 text-sm font-bold text-indigo-600 text-right">
-                        ${selectedOrder.totalAmount.toFixed(2)}
+                        ₹{selectedOrder.totalAmount.toFixed(2)}
                       </td>
                     </tr>
                   </tbody>
