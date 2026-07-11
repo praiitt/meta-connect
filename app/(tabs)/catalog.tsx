@@ -108,7 +108,7 @@ export default function CatalogScreen() {
             </Text>
           </View>
         )}
-        <Text style={styles.price}>${item.price.toFixed(2)}</Text>
+        <Text style={styles.price}>₹{item.price.toFixed(2)}</Text>
         <Text style={styles.moq}>Minimum Order: {item.moq}</Text>
         
         <TouchableOpacity 

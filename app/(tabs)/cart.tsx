@@ -48,7 +48,7 @@ export default function CartScreen() {
     <View style={styles.card}>
       <View style={styles.itemInfo}>
         <Text style={styles.name}>{item.product.name}</Text>
-        <Text style={styles.price}>${item.product.price.toFixed(2)} each</Text>
+        <Text style={styles.price}>₹{item.product.price.toFixed(2)} each</Text>
         <Text style={styles.moq}>MOQ: {item.product.moq}{item.product.weightKg ? ` • Weight: ${item.product.weightKg} kg` : ''}</Text>
       </View>
       
@@ -69,7 +69,7 @@ export default function CartScreen() {
             <Ionicons name="add" size={20} color="#333" />
           </TouchableOpacity>
         </View>
-        <Text style={styles.itemTotal}>${(item.product.price * item.quantity).toFixed(2)}</Text>
+        <Text style={styles.itemTotal}>₹{(item.product.price * item.quantity).toFixed(2)}</Text>
         <TouchableOpacity style={styles.removeBtn} onPress={() => removeItem(item.product.id)}>
           <Ionicons name="trash-outline" size={24} color="#d9534f" />
         </TouchableOpacity>
@@ -102,7 +102,7 @@ export default function CartScreen() {
           )}
           <View style={styles.totalRow}>
             <Text style={styles.totalLabel}>Total Amount:</Text>
-            <Text style={styles.totalValue}>${getCartTotal().toFixed(2)}</Text>
+            <Text style={styles.totalValue}>₹{getCartTotal().toFixed(2)}</Text>
           </View>
           <TouchableOpacity 
             style={styles.checkoutButton} 

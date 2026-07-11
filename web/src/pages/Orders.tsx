@@ -219,7 +219,7 @@ export default function Orders() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
-                        ${order.totalAmount.toFixed(2)}
+                        ₹{order.totalAmount.toFixed(2)}
                       </div>
                       <div className="text-sm text-gray-500">
                         {order.items.length} items
@@ -281,7 +281,7 @@ export default function Orders() {
                     </div>
                     <div className="flex justify-between mb-2">
                       <span className="text-sm text-gray-600">Total:</span>
-                      <span className="text-sm font-medium text-gray-900">${selectedOrder.totalAmount.toFixed(2)}</span>
+                      <span className="text-sm font-medium text-gray-900">₹{selectedOrder.totalAmount.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-gray-600">Status:</span>
@@ -331,13 +331,13 @@ export default function Orders() {
                           {item.product.sku || '-'}
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-900 text-right">
-                          ${item.price.toFixed(2)}
+                          ₹{item.price.toFixed(2)}
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-900 text-right">
                           {item.quantity}
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-900 font-medium text-right">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          ₹{(item.price * item.quantity).toFixed(2)}
                         </td>
                       </tr>
                     ))}

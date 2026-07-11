@@ -421,13 +421,13 @@ const Products = () => {
                   <td className="py-3 px-4">
                     {product.isPricePerKg ? (
                       <div>
-                        <div className="text-slate-900 font-medium">${product.pricePerKg}/kg</div>
+                        <div className="text-slate-900 font-medium">₹{product.pricePerKg}/kg</div>
                         <div className="text-xs text-slate-500">
                           ${product.price} total ({product.weightKg} kg)
                         </div>
                       </div>
                     ) : (
-                      <div className="text-slate-900 font-medium">${product.price}</div>
+                      <div className="text-slate-900 font-medium">₹{product.price}</div>
                     )}
                   </td>
                   <td className="py-3 px-4 text-slate-600">{product.moq}</td>
