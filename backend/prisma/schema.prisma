@@ -43,6 +43,8 @@ model Product {
   moq          Int         @default(1)
   sku          String?     @unique
   inStock      Boolean     @default(true)
+  inventory    Int         @default(0)
+  stockQuantity Int         @default(0)
   imageUrl     String?
   weightKg     Float?
   markupAmount Float?

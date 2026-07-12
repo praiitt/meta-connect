@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Image, Alert, TextInput, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Image, Alert, TextInput, ScrollView, RefreshControl } from 'react-native';
+import { useNavigation } from 'expo-router';
 import apiClient from '../../api/client';
 import { useCartStore, Product } from '../../store/useCartStore';
 import { Ionicons } from '@expo/vector-icons';
@@ -34,6 +35,30 @@ export default function CatalogScreen() {
   const [showInStockOnly, setShowInStockOnly] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const addItem = useCartStore((state) => state.addItem);
+  const [refreshing, setRefreshing] = useState(false);
+  const navigation = useNavigation();
+  
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={fetchData} style={{ marginRight: 15, padding: 5 }}>
+          <Ionicons name="refresh" size={24} color="#0066cc" />
+        </TouchableOpacity>
+      )
+    });
+  }, [navigation]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchData();
+    setRefreshing(false);
+  };
+
+  const getFullImageUrl = (url) => {
+    if (!url) return null;
+    if (url.startsWith('http')) return url;
+    return `https://metal-connect.dev.rraasi.com${url.startsWith('/') ? url : '/' + url}`;
+  };
 
   useEffect(() => {
     fetchData();
@@ -90,8 +115,8 @@ export default function CatalogScreen() {
 
   const renderProduct = ({ item }: { item: Product }) => (
     <View style={styles.card}>
-      {item.imageUrl ? (
-        <Image source={{ uri: item.imageUrl }} style={styles.image} />
+      {item.imageUrl && getFullImageUrl(item.imageUrl) ? (
+        <Image source={{ uri: getFullImageUrl(item.imageUrl) }} style={styles.image} resizeMode="contain" />
       ) : (
         <View style={styles.imagePlaceholder}>
           <Ionicons name="cube-outline" size={40} color="#ccc" />
@@ -215,6 +240,7 @@ export default function CatalogScreen() {
 
       <FlatList
         data={filteredProducts}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         keyExtractor={(item) => item.id}
         renderItem={renderProduct}
         contentContainerStyle={styles.list}

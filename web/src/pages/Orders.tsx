@@ -241,25 +241,25 @@ export default function Orders() {
                       {getStatusBadge(order.status)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button
-                        onClick={() => setSelectedOrder(order)}
-                        className="text-indigo-600 hover:text-indigo-900 flex items-center justify-end w-full"
-                      >
-                        <Eye className="w-4 h-4 mr-1" /> View Details
-                      </button>
-                      
-                      {order.status === 'CONFIRMED' && (
+                      <div className="flex items-center justify-end gap-3">
+                        <button
+                          onClick={() => setSelectedOrder(order)}
+                          className="text-indigo-600 hover:text-indigo-900 flex items-center"
+                        >
+                          <Eye className="w-4 h-4 mr-1" /> View
+                        </button>
+                        
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             printReceipt(order);
                           }}
-                          className="ml-4 text-gray-600 hover:text-gray-900 flex items-center inline-flex"
+                          className="text-gray-600 hover:text-gray-900 flex items-center"
                           title="Print Receipt"
                         >
                           <Printer className="w-4 h-4 mr-1" /> Print
                         </button>
-                      )}
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -278,14 +278,12 @@ export default function Orders() {
                 <h3 className="text-lg font-medium text-gray-900">
                   Order #{selectedOrder.id.slice(0, 8).toUpperCase()}
                 </h3>
-                {selectedOrder.status === 'CONFIRMED' && (
-                  <button
-                    onClick={() => printReceipt(selectedOrder)}
-                    className="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200"
-                  >
-                    <Printer className="w-4 h-4" /> Print
-                  </button>
-                )}
+                <button
+                  onClick={() => printReceipt(selectedOrder)}
+                  className="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200"
+                >
+                  <Printer className="w-4 h-4" /> Print
+                </button>
               </div>
               <button
                 onClick={() => setSelectedOrder(null)}
