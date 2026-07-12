@@ -56,15 +56,15 @@ export default function CartScreen() {
         <View style={styles.quantityControl}>
           <TouchableOpacity 
             style={styles.qtyButton}
-            onPress={() => updateQuantity(item.product.id, item.quantity - 1)}
-            disabled={item.quantity <= item.product.moq}
+            onPress={() => updateQuantity(item.product.id, Number(item.quantity) - 1)}
+            disabled={Number(item.quantity) <= Number(item.product.moq)}
           >
-            <Ionicons name="remove" size={20} color={item.quantity <= item.product.moq ? '#ccc' : '#333'} />
+            <Ionicons name="remove" size={20} color={Number(item.quantity) <= Number(item.product.moq) ? '#ccc' : '#333'} />
           </TouchableOpacity>
           <Text style={styles.quantity}>{item.quantity}</Text>
           <TouchableOpacity 
             style={styles.qtyButton}
-            onPress={() => updateQuantity(item.product.id, item.quantity + 1)}
+            onPress={() => updateQuantity(item.product.id, Number(item.quantity) + 1)}
           >
             <Ionicons name="add" size={20} color="#333" />
           </TouchableOpacity>

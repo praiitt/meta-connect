@@ -36,12 +36,12 @@ export const useCartStore = create<CartState>((set, get) => ({
     const existingItemIndex = state.items.findIndex(item => item.product.id === product.id);
     
     // Ensure quantity meets MOQ
-    const safeQuantity = Math.max(quantity, product.moq);
+    const safeQuantity = Math.max(Number(quantity), Number(product.moq));
 
     if (existingItemIndex >= 0) {
       // Update existing
       const newItems = [...state.items];
-      newItems[existingItemIndex].quantity += safeQuantity;
+      newItems[existingItemIndex] = { ...newItems[existingItemIndex], quantity: Number(newItems[existingItemIndex].quantity) + safeQuantity };
       return { items: newItems };
     } else {
       // Add new
@@ -54,10 +54,10 @@ export const useCartStore = create<CartState>((set, get) => ({
 
     const item = state.items[itemIndex];
     // Strictly enforce MOQ when updating
-    const safeQuantity = Math.max(quantity, item.product.moq);
+    const safeQuantity = Math.max(Number(quantity), Number(item.product.moq));
 
     const newItems = [...state.items];
-    newItems[itemIndex].quantity = safeQuantity;
+    newItems[itemIndex] = { ...newItems[itemIndex], quantity: safeQuantity };
     return { items: newItems };
   }),
   removeItem: (productId) => set((state) => ({

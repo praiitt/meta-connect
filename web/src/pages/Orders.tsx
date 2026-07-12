@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { apiClient } from '../api/client';
-import { Package, Truck, CheckCircle, XCircle, Clock, Eye, X, Download } from 'lucide-react';
+import { Package, Truck, CheckCircle, XCircle, Clock, Eye, X, Download, Printer } from 'lucide-react';
 import { exportOrdersToCSV } from '../utils/csvExport';
+import { printReceipt } from '../utils/printReceipt';
 
 interface User {
   id: string;
@@ -86,11 +87,22 @@ export default function Orders() {
     try {
       setUpdating(orderId);
       await apiClient.patch(`/orders/${orderId}/status`, { status: newStatus, notifyUser });
+      
       setOrders((prev) =>
         prev.map((order) =>
           order.id === orderId ? { ...order, status: newStatus as Order['status'] } : order
         )
       );
+      
+      // Auto-print if confirmed
+      if (newStatus === 'CONFIRMED') {
+        const orderToPrint = orders.find(o => o.id === orderId);
+        if (orderToPrint) {
+          const updatedPrintOrder = { ...orderToPrint, status: 'CONFIRMED' };
+          printReceipt(updatedPrintOrder);
+        }
+      }
+  
       if (selectedOrder && selectedOrder.id === orderId) {
         setSelectedOrder({ ...selectedOrder, status: newStatus as Order['status'] });
       }
@@ -235,6 +247,19 @@ export default function Orders() {
                       >
                         <Eye className="w-4 h-4 mr-1" /> View Details
                       </button>
+                      
+                      {order.status === 'CONFIRMED' && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            printReceipt(order);
+                          }}
+                          className="ml-4 text-gray-600 hover:text-gray-900 flex items-center inline-flex"
+                          title="Print Receipt"
+                        >
+                          <Printer className="w-4 h-4 mr-1" /> Print
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))
@@ -249,9 +274,19 @@ export default function Orders() {
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white z-10">
-              <h3 className="text-lg font-medium text-gray-900">
-                Order #{selectedOrder.id.slice(0, 8).toUpperCase()}
-              </h3>
+              <div className="flex items-center gap-4">
+                <h3 className="text-lg font-medium text-gray-900">
+                  Order #{selectedOrder.id.slice(0, 8).toUpperCase()}
+                </h3>
+                {selectedOrder.status === 'CONFIRMED' && (
+                  <button
+                    onClick={() => printReceipt(selectedOrder)}
+                    className="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200"
+                  >
+                    <Printer className="w-4 h-4" /> Print
+                  </button>
+                )}
+              </div>
               <button
                 onClick={() => setSelectedOrder(null)}
                 className="text-gray-400 hover:text-gray-500"
