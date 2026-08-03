@@ -5,7 +5,6 @@ workflows:
   android-apk:
     name: Android APK Build (Dev)
     max_build_duration: 90
-    working_directory: .
     environment:
       node: 20
       java: 17
@@ -18,7 +17,34 @@ workflows:
       - name: Install dependencies
         script: npm install --legacy-peer-deps
       - name: Expo Prebuild
-        script: npx expo prebuild --platform android --clean --non-interactive
+        script: CI=1 npx expo prebuild --platform android --clean
+      - name: Patch Gradle repositories
+        script: |
+          python3 -c "
+          import re, glob
+          for f in glob.glob('android/**/*.gradle', recursive=True) + glob.glob('android/*.gradle'):
+              c = open(f).read()
+              if 'sonatype' not in c: continue
+              c = re.sub(r'maven\s*\{[^}]*sonatype[^}]*\}', '', c, flags=re.DOTALL)
+              c = re.sub(r'.*sonatype.*\n', '', c)
+              open(f, 'w').write(c)
+              print(f'Patched: {f}')
+          "
+      - name: Fix Android resources
+        script: |
+          if [ ! -f android/app/src/main/res/values/colors.xml ]; then
+            mkdir -p android/app/src/main/res/values
+            echo '<?xml version="1.0" encoding="utf-8"?><resources><color name="splashscreen_background">#ffffff</color></resources>' > android/app/src/main/res/values/colors.xml
+          fi
+      - name: Set up Android Keystore (Vibe Universal)
+        script: |
+          if [ -n "$CM_KEYSTORE_PATH" ]; then
+            echo "Setting up universal keystore from Codemagic native identity..."
+            echo "ORG_GRADLE_PROJECT_MYAPP_UPLOAD_STORE_FILE=$CM_KEYSTORE_PATH" >> android/gradle.properties
+            echo "ORG_GRADLE_PROJECT_MYAPP_UPLOAD_KEY_ALIAS=$CM_KEY_ALIAS" >> android/gradle.properties
+            echo "ORG_GRADLE_PROJECT_MYAPP_UPLOAD_STORE_PASSWORD=$CM_KEYSTORE_PASSWORD" >> android/gradle.properties
+            echo "ORG_GRADLE_PROJECT_MYAPP_UPLOAD_KEY_PASSWORD=$CM_KEY_PASSWORD" >> android/gradle.properties
+          fi
       - name: Build APK
         script: |
           cd android
@@ -38,7 +64,6 @@ workflows:
   android-aab:
     name: Android AAB Build (Production / Play Store)
     max_build_duration: 90
-    working_directory: .
     environment:
       node: 20
       java: 17
@@ -51,7 +76,34 @@ workflows:
       - name: Install dependencies
         script: npm install --legacy-peer-deps
       - name: Expo Prebuild
-        script: npx expo prebuild --platform android --clean --non-interactive
+        script: CI=1 npx expo prebuild --platform android --clean
+      - name: Patch Gradle repositories
+        script: |
+          python3 -c "
+          import re, glob
+          for f in glob.glob('android/**/*.gradle', recursive=True) + glob.glob('android/*.gradle'):
+              c = open(f).read()
+              if 'sonatype' not in c: continue
+              c = re.sub(r'maven\s*\{[^}]*sonatype[^}]*\}', '', c, flags=re.DOTALL)
+              c = re.sub(r'.*sonatype.*\n', '', c)
+              open(f, 'w').write(c)
+              print(f'Patched: {f}')
+          "
+      - name: Fix Android resources
+        script: |
+          if [ ! -f android/app/src/main/res/values/colors.xml ]; then
+            mkdir -p android/app/src/main/res/values
+            echo '<?xml version="1.0" encoding="utf-8"?><resources><color name="splashscreen_background">#ffffff</color></resources>' > android/app/src/main/res/values/colors.xml
+          fi
+      - name: Set up Android Keystore (Vibe Universal)
+        script: |
+          if [ -n "$CM_KEYSTORE_PATH" ]; then
+            echo "Setting up universal keystore from Codemagic native identity..."
+            echo "ORG_GRADLE_PROJECT_MYAPP_UPLOAD_STORE_FILE=$CM_KEYSTORE_PATH" >> android/gradle.properties
+            echo "ORG_GRADLE_PROJECT_MYAPP_UPLOAD_KEY_ALIAS=$CM_KEY_ALIAS" >> android/gradle.properties
+            echo "ORG_GRADLE_PROJECT_MYAPP_UPLOAD_STORE_PASSWORD=$CM_KEYSTORE_PASSWORD" >> android/gradle.properties
+            echo "ORG_GRADLE_PROJECT_MYAPP_UPLOAD_KEY_PASSWORD=$CM_KEY_PASSWORD" >> android/gradle.properties
+          fi
       - name: Build AAB
         script: |
           cd android
